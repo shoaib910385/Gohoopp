@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Waifu Catcher</title>
 
-<!-- Telegram WebApp -->
+<!-- Telegram WebApp SDK -->
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <!-- Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
 
 <!-- Tailwind CDN -->
 <script src="https://cdn.tailwindcss.com"></script>
@@ -24,7 +24,8 @@ tailwind.config = {
         neon: "#00F2FF",
         purple: "#BF00FF",
         gold: "#FFD36A",
-        danger: "#FF0055"
+        danger: "#FF0055",
+        dark: "#050014"
       }
     }
   }
@@ -35,17 +36,17 @@ tailwind.config = {
 body {
   font-family: 'Inter', sans-serif;
   background:
-    radial-gradient(circle at top, rgba(191,0,255,.15), transparent 40%),
-    radial-gradient(circle at bottom, #050014, #02010a 60%);
+    radial-gradient(circle at top, rgba(191,0,255,.18), transparent 40%),
+    radial-gradient(circle at bottom, #070018, #02010a 60%);
 }
 
-/* Glass UI */
+/* Glass card */
 .glass {
-  background: rgba(255,255,255,.06);
-  backdrop-filter: blur(16px);
+  background: rgba(255,255,255,.07);
+  backdrop-filter: blur(14px);
 }
 
-/* Gradient Border */
+/* Gradient border */
 .rim {
   position: relative;
 }
@@ -63,10 +64,10 @@ body {
   pointer-events:none;
 }
 
-/* Title Font */
+/* Title font */
 .title {
   font-family: 'Orbitron', sans-serif;
-  letter-spacing: .12em;
+  letter-spacing: .14em;
 }
 </style>
 </head>
@@ -75,17 +76,16 @@ body {
 
 <main class="max-w-[420px] mx-auto p-4 space-y-4">
 
-<!-- Header -->
+<!-- HEADER -->
 <header class="text-center title text-sm opacity-90">
   WAIFU CATCHER ✨
 </header>
 
-<!-- Profile Card -->
+<!-- PROFILE -->
 <section class="glass rim rounded-xl p-4 flex gap-4 items-center">
   <img id="avatar"
-       class="w-16 h-16 rounded-full bg-purple-600"
-       src=""
-       alt="avatar" />
+       class="w-16 h-16 rounded-full bg-purple"
+       alt="Avatar">
 
   <div>
     <div id="name" class="title text-lg">Loading...</div>
@@ -94,34 +94,42 @@ body {
   </div>
 </section>
 
-<!-- Stats -->
+<!-- STATS -->
 <section class="grid grid-cols-3 gap-3">
   <div class="glass rim rounded-lg p-3 text-center">
-    <div class="text-neon font-semibold text-lg" id="waifus">0</div>
-    <div class="text-xs opacity-60">WAIFUS</div>
+    <div id="balance" class="text-neon text-lg font-semibold">0</div>
+    <div class="text-xs opacity-60">COINS</div>
   </div>
+
   <div class="glass rim rounded-lg p-3 text-center">
-    <div class="text-purple font-semibold text-lg">0</div>
-    <div class="text-xs opacity-60">RARITY</div>
+    <div id="harem" class="text-purple text-lg font-semibold">0</div>
+    <div class="text-xs opacity-60">HAREM</div>
   </div>
+
   <div class="glass rim rounded-lg p-3 text-center">
-    <div class="text-gold font-semibold text-lg">#—</div>
+    <div id="rank" class="text-gold text-lg font-semibold">B</div>
     <div class="text-xs opacity-60">RANK</div>
   </div>
 </section>
 
-<!-- Action -->
+<!-- ACTION BUTTONS -->
 <button id="catchBtn"
   class="w-full py-4 rounded-xl font-semibold text-lg
          bg-gradient-to-r from-purple to-neon">
   🎯 Catch Waifu
 </button>
 
-<!-- Activity -->
+<button id="bonusBtn"
+  class="w-full py-4 rounded-xl font-semibold text-lg
+         bg-gradient-to-r from-gold to-yellow-400 text-black">
+  🎁 Daily Bonus
+</button>
+
+<!-- ACTIVITY -->
 <section class="glass rim rounded-xl p-4">
   <div class="title text-xs opacity-70">ACTIVITY</div>
-  <div class="text-center opacity-40 mt-4">
-    No activity yet
+  <div id="activity" class="text-center opacity-40 mt-4">
+    No recent activity
   </div>
 </section>
 
@@ -141,10 +149,11 @@ tg.ready();
 const user = tg.initDataUnsafe?.user;
 
 if (!user) {
-  alert("❌ Please open this inside Telegram");
+  document.body.innerHTML = "❌ Open inside Telegram only";
+  throw new Error("Not Telegram");
 }
 
-/* ================= USER DATA ================= */
+/* ================= PROFILE ================= */
 
 document.getElementById("name").innerText =
   `${user.first_name || ""} ${user.last_name || ""}`;
@@ -159,18 +168,30 @@ if (user.photo_url) {
   document.getElementById("avatar").src = user.photo_url;
 }
 
-/* ================= ACTION ================= */
+/* ================= BUTTON ACTIONS ================= */
 
 document.getElementById("catchBtn").onclick = () => {
   tg.HapticFeedback.impactOccurred("medium");
 
-  // Send data back to bot
   tg.sendData(JSON.stringify({
-    action: "catch_waifu",
-    user_id: user.id
+    action: "catch_waifu"
   }));
+
+  document.getElementById("activity").innerText =
+    "🎯 Catch request sent...";
+};
+
+document.getElementById("bonusBtn").onclick = () => {
+  tg.HapticFeedback.impactOccurred("light");
+
+  tg.sendData(JSON.stringify({
+    action: "daily_bonus"
+  }));
+
+  document.getElementById("activity").innerText =
+    "🎁 Bonus request sent...";
 };
 </script>
 
 </body>
-</html
+</html>
