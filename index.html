@@ -1,179 +1,223 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🎉 Happy Birthday Kambir Bhaii 🎂</title>
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;700&family=Poppins:wght@400;600;700&family=Lobster&display=swap" rel="stylesheet">
-  <style>
-    * {margin: 0; padding: 0; box-sizing: border-box;}
-    body {font-family: 'Poppins', sans-serif; background: linear-gradient(135deg,#ffecd2,#fcb69f); color:#333; overflow-x:hidden;}
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>WaifuVerse Nexus</title>
 
-    /* ---------- LOCK PAGE ---------- */
-    #lockScreen {
-      display:flex; justify-content:center; align-items:center;
-      height:100vh; background:linear-gradient(135deg,#1e3c72,#2a5298); color:white;
-    }
-    .lock-container {
-      background:rgba(255,255,255,0.1); backdrop-filter:blur(12px);
-      padding:2rem; border-radius:1.5rem; text-align:center; width:90%; max-width:400px;
-      box-shadow:0 8px 20px rgba(0,0,0,0.3);
-    }
-    .lock-container h1 {font-family:'Google Sans',sans-serif;font-size:2rem;margin-bottom:1rem;}
-    .lock-container input {width:80%;padding:0.7rem;margin:1rem 0;border:none;border-radius:0.5rem;font-size:1rem;}
-    .lock-container button {background:#ff6f61;color:white;border:none;padding:0.8rem 1.5rem;border-radius:1rem;font-size:1rem;cursor:pointer;transition:0.3s;}
-    .lock-container button:hover {background:#ff3d2e;}
-    .error {color:#ffdddd;margin-top:1rem;font-size:0.9rem;display:none;}
+<!-- Preconnect for speed -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-    /* ---------- MAIN PAGE ---------- */
-    #mainPage {display:none;}
-    header {text-align:center;padding:2rem 1rem;background:#ff6f61;color:white;
-      border-bottom-left-radius:2rem;border-bottom-right-radius:2rem;box-shadow:0 4px 10px rgba(0,0,0,0.2);}
-    header h1 {font-family:'Lobster',cursive;font-size:3rem;margin-bottom:.5rem;}
-    header p {font-size:1.2rem;font-weight:500;}
-    .content {max-width:1000px;margin:2rem auto;padding:1.5rem;background:white;border-radius:2rem;
-      box-shadow:0 4px 15px rgba(0,0,0,0.1);text-align:center;}
-    .content h2 {font-family:'Google Sans',sans-serif;font-size:2rem;margin-bottom:1rem;color:#ff6f61;}
-    .big-wish {font-size:2.5rem;font-weight:700;margin:2rem 0;background:linear-gradient(to right,#ff512f,#dd2476);
-      -webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-    .icons {font-size:2rem;margin:1rem 0;animation:bounce 2s infinite;}
-    @keyframes bounce {0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
-    .wish-tiles {display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1rem;margin-top:2rem;}
-    .tile {background:#fff6f6;padding:1.5rem;border-radius:1.5rem;box-shadow:0 4px 10px rgba(0,0,0,0.1);transition:transform 0.3s;}
-    .tile:hover {transform:translateY(-5px);}
-    .tile p {font-size:1rem;line-height:1.6;}
-    footer {margin-top:3rem;padding:1.5rem;text-align:center;background:#ff6f61;color:white;font-size:1rem;
-      border-top-left-radius:2rem;border-top-right-radius:2rem;}
-    footer p {margin:.5rem 0;}
-    @media(max-width:600px){header h1{font-size:2rem;}.big-wish{font-size:2rem;}}
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 
-    /* ---------- CONFETTI ---------- */
-    canvas#confettiCanvas {
-      position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;display:none;
+<!-- Tailwind CDN (fastest static option) -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        neonCyan: "#00F2FF",
+        electricPurple: "#BF00FF",
+        royalGold: "#FFD36A",
+        gachaRed: "#FF0055"
+      }
     }
-  </style>
+  }
+}
+</script>
+
+<style>
+:root {
+  --purple: 191,0,255;
+  --cyan: 0,242,255;
+  --gold: 255,211,106;
+}
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background:
+    radial-gradient(circle at 20% 10%, rgba(var(--purple),.15), transparent 40%),
+    radial-gradient(circle at 80% 30%, rgba(var(--cyan),.12), transparent 40%),
+    radial-gradient(circle at bottom, #030008, #02010a 60%);
+  overflow-x: hidden;
+}
+
+/* Star particles (GPU-friendly) */
+body::before {
+  content:"";
+  position:fixed;
+  inset:0;
+  background:
+    radial-gradient(#ffffff22 1px, transparent 1px),
+    radial-gradient(#ffffff11 1px, transparent 1px);
+  background-size: 140px 140px, 220px 220px;
+  animation: drift 140s linear infinite;
+  pointer-events:none;
+}
+
+@keyframes drift {
+  to { transform: translateY(-2000px); }
+}
+
+/* Glass */
+.glass {
+  background: rgba(255,255,255,.06);
+  backdrop-filter: blur(16px);
+}
+
+/* Gradient border */
+.rim {
+  position: relative;
+}
+.rim::before {
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:22px;
+  padding:1px;
+  background: linear-gradient(135deg,
+    rgba(var(--purple),.9),
+    rgba(var(--cyan),.6),
+    rgba(var(--gold),.5)
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;
+  mask-composite:exclude;
+  pointer-events:none;
+}
+
+/* Floating card */
+.float {
+  animation: float 6s ease-in-out infinite;
+}
+@keyframes float {
+  50% { transform: translateY(-6px); }
+}
+
+/* Glows */
+.glow-purple { box-shadow: 0 0 28px rgba(var(--purple),.45); }
+.glow-cyan { box-shadow: 0 0 28px rgba(var(--cyan),.35); }
+
+/* Spin button */
+.spin-btn {
+  background: linear-gradient(135deg, #ff0033, #ffd36a);
+  animation: pulse 2.4s infinite;
+}
+@keyframes pulse {
+  50% { box-shadow: 0 0 44px rgba(var(--gold),.9); }
+}
+
+/* Titles */
+.title-font {
+  font-family: 'Orbitron', sans-serif;
+  letter-spacing: .15em;
+}
+</style>
 </head>
-<body>
 
-  <!-- 🔒 Lock Screen -->
-  <div id="lockScreen">
-    <div class="lock-container">
-      <h1>🔒 Enter Passcode</h1>
-      <input type="password" id="code" placeholder="Enter Secret Code">
-      <br>
-      <button onclick="unlock()">Unlock</button>
-      <p class="error" id="error">❌ Wrong Code! Try again.</p>
-    </div>
-  </div>
+<body class="text-white">
 
-  <!-- 🎂 Main Birthday Page -->
-  <div id="mainPage">
-    <audio id="bgMusic" src="https://files.catbox.moe/5a7uzu.mp3" loop></audio>
-    <canvas id="confettiCanvas"></canvas>
+<main class="max-w-[420px] mx-auto p-4 space-y-4">
 
-    <header>
-      <h1>🎉 Happy Birthday 🎂</h1>
-      <p>To my <strong>Pyaara heera beta Kambhir</strong> 🥳</p>
-    </header>
+<!-- Header -->
+<header class="flex items-center justify-between title-font text-sm opacity-90">
+  <span>✕</span>
+  <span>WAIFUVERSE ✨</span>
+  <span>⋮</span>
+</header>
 
-    <div class="content">
-      <div class="icons">🎂🎈🎁🎊✨🍰🥳</div>
-      <h2>Cheers to You, Bro </h2>
-      <p>From the bottom of my heart, I want to wish you the most amazing birthday ever.<br>
-      Bro<br>
-      May this year bring you joy, success, and endless smiles 🎉</p>
-
-      <div class="big-wish">HAPPY BIRTHDAY HEERA BETA KABIR😂✌️🎂🎉</div>
-
-      <!-- Wishes Grid -->
-      <div class="wish-tiles">
-        <div class="tile"><p>🎂 Wishing you a day filled with love, laughter, and all the cake you can eat! 🍰</p></div>
-        <div class="tile"><p>🎉 May your dreams take flight this year and bring you endless happiness. ✨</p></div>
-        <div class="tile"><p>🔥 Keep shining and breaking limits. 💯</p></div>
-        <div class="tile"><p>💖 May your heart always stay pure and your smile never fade. 🌟</p></div>
-        <div class="tile"><p>🎶 May every step you take bring you closer to success and joy. 🏆</p></div>
-        <div class="tile"><p>🥳 Sons like you are blessings. Forever bond, forever love ❤️</p></div>
+<!-- Profile -->
+<section class="glass rim rounded-[22px] p-4 space-y-4 float">
+  <div class="flex items-center gap-4">
+    <div class="w-16 h-16 rounded-full bg-gradient-to-br from-electricPurple to-neonCyan glow-purple"></div>
+    <div>
+      <div class="title-font text-lg">- δτλκεR =</div>
+      <div class="text-xs opacity-50">ID: 7659846392</div>
+      <div class="text-electricPurple text-sm mt-1">
+        ₹ 0 <span class="opacity-60">NEXUS COINS</span>
       </div>
-
-      <div class="icons">🎁🍾🎈🎂🎶🔥🎊</div>
     </div>
-
-    <footer>
-      <p>Made with ❤️ & 🎂 by Stalker</p>
-      <p>🎉 Stay Blessed Always 🎉</p>
-    </footer>
   </div>
 
-  <!-- ---------- Scripts ---------- -->
-  <script>
-    function unlock() {
-      let code = document.getElementById("code").value;
-      if (code === "KAMBIR") {
-        document.getElementById("lockScreen").style.display = "none";
-        document.getElementById("mainPage").style.display = "block";
-        playMusic();
-        sprinkleConfetti();
-      } else {
-        document.getElementById("error").style.display = "block";
-      }
-    }
+  <button class="spin-btn w-full py-4 rounded-xl text-lg font-semibold">
+    🎅 Christmas Spin 🎁
+  </button>
+</section>
 
-    function playMusic() {
-      const music = document.getElementById("bgMusic");
-      music.play().catch(()=>console.log("Autoplay blocked until user interacts."));
-    }
+<!-- Stats -->
+<section class="grid grid-cols-3 gap-3">
+  <div class="glass rim rounded-xl p-4 text-center glow-cyan">
+    <div class="text-neonCyan text-xl font-semibold">0</div>
+    <div class="text-xs opacity-60">WAIFUS</div>
+  </div>
+  <div class="glass rim rounded-xl p-4 text-center glow-purple">
+    <div class="text-electricPurple text-xl font-semibold">0</div>
+    <div class="text-xs opacity-60">ECLIPSE</div>
+  </div>
+  <div class="glass rim rounded-xl p-4 text-center">
+    <div class="text-gachaRed text-xl font-semibold">#455</div>
+    <div class="text-xs opacity-60">RANK</div>
+  </div>
+</section>
 
-    // ---------- One-Time Sprinkle Confetti ----------
-    function sprinkleConfetti() {
-      const canvas = document.getElementById("confettiCanvas");
-      const ctx = canvas.getContext("2d");
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-      canvas.style.display = "block";
+<section class="grid grid-cols-2 gap-3">
+  <div class="glass rim rounded-xl p-4 text-center">
+    <div class="text-neonCyan text-xl font-semibold">0</div>
+    <div class="text-xs opacity-60">ANIME</div>
+  </div>
+  <div class="glass rim rounded-xl p-4 text-center">
+    <div class="text-electricPurple text-xl font-semibold">0%</div>
+    <div class="text-xs opacity-60">COLLECTED</div>
+  </div>
+</section>
 
-      const confetti = [];
-      for (let i=0;i<100;i++) {
-        confetti.push({
-          x: Math.random()*canvas.width,
-          y: Math.random()*-canvas.height,
-          r: Math.random()*6+4,
-          dx: Math.random()*2-1,
-          dy: Math.random()*3+2,
-          color: `hsl(${Math.random()*360},100%,50%)`
-        });
-      }
+<!-- Activity -->
+<section class="glass rim rounded-xl p-4">
+  <div class="title-font text-xs opacity-70">RECENT ACTIVITY</div>
+  <div class="text-center text-sm opacity-40 mt-4">No recent activity</div>
+</section>
 
-      function draw() {
-        ctx.clearRect(0,0,canvas.width,canvas.height);
-        confetti.forEach(c=>{
-          ctx.beginPath();
-          ctx.arc(c.x,c.y,c.r,0,Math.PI*2);
-          ctx.fillStyle=c.color;
-          ctx.fill();
-        });
-      }
+<!-- Menu -->
+<section class="space-y-3">
+  <div class="glass rim rounded-xl p-5 flex justify-between items-center hover:scale-[1.02] transition">
+    <div>
+      <div class="title-font">MYVERSE</div>
+      <div class="text-xs opacity-60">Manage your collection</div>
+    </div> 📚
+  </div>
 
-      function update() {
-        confetti.forEach(c=>{
-          c.x+=c.dx;
-          c.y+=c.dy;
-        });
-      }
+  <div class="glass rim rounded-xl p-5 flex justify-between items-center glow-purple hover:scale-[1.02] transition">
+    <div>
+      <div class="title-font text-electricPurple">FUSION LAB ⚡</div>
+      <div class="text-xs opacity-60">Fuse waifus</div>
+    </div> 🧬
+  </div>
 
-      let frames = 0;
-      function animate() {
-        draw();
-        update();
-        frames++;
-        if(frames < 150){ // runs ~2.5 sec at 60fps
-          requestAnimationFrame(animate);
-        } else {
-          canvas.style.display = "none"; // hide after sprinkle
-        }
-      }
-      animate();
-    }
-  </script>
+  <div class="glass rim rounded-xl p-5 flex justify-between items-center glow-cyan hover:scale-[1.02] transition">
+    <div>
+      <div class="title-font text-gachaRed">GACHA ★</div>
+      <div class="text-xs opacity-60">Summon rare waifus</div>
+    </div> 💎
+  </div>
+</section>
+
+<!-- Favorite -->
+<section class="glass rim rounded-xl p-4">
+  <div class="title-font text-xs opacity-70">FAVORITE WAIFU</div>
+  <div class="text-center opacity-40 mt-4">No favorite set</div>
+</section>
+
+<footer class="text-center text-xs opacity-30 py-4">
+  WAIFUVERSE NEXUS v1.1.1<br>
+  Privacy Policy • Terms • Help
+</footer>
+
+</main>
 </body>
 </html>
