@@ -3,16 +3,17 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>WaifuVerse Nexus</title>
+<title>Waifu Catcher</title>
 
-<!-- Preconnect for speed -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- Telegram WebApp -->
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <!-- Fonts -->
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
 
-<!-- Tailwind CDN (fastest static option) -->
+<!-- Tailwind CDN -->
 <script src="https://cdn.tailwindcss.com"></script>
 
 <script>
@@ -20,10 +21,10 @@ tailwind.config = {
   theme: {
     extend: {
       colors: {
-        neonCyan: "#00F2FF",
-        electricPurple: "#BF00FF",
-        royalGold: "#FFD36A",
-        gachaRed: "#FF0055"
+        neon: "#00F2FF",
+        purple: "#BF00FF",
+        gold: "#FFD36A",
+        danger: "#FF0055"
       }
     }
   }
@@ -31,45 +32,20 @@ tailwind.config = {
 </script>
 
 <style>
-:root {
-  --purple: 191,0,255;
-  --cyan: 0,242,255;
-  --gold: 255,211,106;
-}
-
 body {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: 'Inter', sans-serif;
   background:
-    radial-gradient(circle at 20% 10%, rgba(var(--purple),.15), transparent 40%),
-    radial-gradient(circle at 80% 30%, rgba(var(--cyan),.12), transparent 40%),
-    radial-gradient(circle at bottom, #030008, #02010a 60%);
-  overflow-x: hidden;
+    radial-gradient(circle at top, rgba(191,0,255,.15), transparent 40%),
+    radial-gradient(circle at bottom, #050014, #02010a 60%);
 }
 
-/* Star particles (GPU-friendly) */
-body::before {
-  content:"";
-  position:fixed;
-  inset:0;
-  background:
-    radial-gradient(#ffffff22 1px, transparent 1px),
-    radial-gradient(#ffffff11 1px, transparent 1px);
-  background-size: 140px 140px, 220px 220px;
-  animation: drift 140s linear infinite;
-  pointer-events:none;
-}
-
-@keyframes drift {
-  to { transform: translateY(-2000px); }
-}
-
-/* Glass */
+/* Glass UI */
 .glass {
   background: rgba(255,255,255,.06);
   backdrop-filter: blur(16px);
 }
 
-/* Gradient border */
+/* Gradient Border */
 .rim {
   position: relative;
 }
@@ -77,46 +53,20 @@ body::before {
   content:"";
   position:absolute;
   inset:0;
-  border-radius:22px;
+  border-radius:18px;
   padding:1px;
-  background: linear-gradient(135deg,
-    rgba(var(--purple),.9),
-    rgba(var(--cyan),.6),
-    rgba(var(--gold),.5)
-  );
+  background: linear-gradient(135deg, #bf00ff, #00f2ff, #ffd36a);
   -webkit-mask:
     linear-gradient(#000 0 0) content-box,
     linear-gradient(#000 0 0);
   -webkit-mask-composite:xor;
-  mask-composite:exclude;
   pointer-events:none;
 }
 
-/* Floating card */
-.float {
-  animation: float 6s ease-in-out infinite;
-}
-@keyframes float {
-  50% { transform: translateY(-6px); }
-}
-
-/* Glows */
-.glow-purple { box-shadow: 0 0 28px rgba(var(--purple),.45); }
-.glow-cyan { box-shadow: 0 0 28px rgba(var(--cyan),.35); }
-
-/* Spin button */
-.spin-btn {
-  background: linear-gradient(135deg, #ff0033, #ffd36a);
-  animation: pulse 2.4s infinite;
-}
-@keyframes pulse {
-  50% { box-shadow: 0 0 44px rgba(var(--gold),.9); }
-}
-
-/* Titles */
-.title-font {
+/* Title Font */
+.title {
   font-family: 'Orbitron', sans-serif;
-  letter-spacing: .15em;
+  letter-spacing: .12em;
 }
 </style>
 </head>
@@ -126,98 +76,101 @@ body::before {
 <main class="max-w-[420px] mx-auto p-4 space-y-4">
 
 <!-- Header -->
-<header class="flex items-center justify-between title-font text-sm opacity-90">
-  <span>✕</span>
-  <span>WAIFUVERSE ✨</span>
-  <span>⋮</span>
+<header class="text-center title text-sm opacity-90">
+  WAIFU CATCHER ✨
 </header>
 
-<!-- Profile -->
-<section class="glass rim rounded-[22px] p-4 space-y-4 float">
-  <div class="flex items-center gap-4">
-    <div class="w-16 h-16 rounded-full bg-gradient-to-br from-electricPurple to-neonCyan glow-purple"></div>
-    <div>
-      <div class="title-font text-lg">- δτλκεR =</div>
-      <div class="text-xs opacity-50">ID: 7659846392</div>
-      <div class="text-electricPurple text-sm mt-1">
-        ₹ 0 <span class="opacity-60">NEXUS COINS</span>
-      </div>
-    </div>
-  </div>
+<!-- Profile Card -->
+<section class="glass rim rounded-xl p-4 flex gap-4 items-center">
+  <img id="avatar"
+       class="w-16 h-16 rounded-full bg-purple-600"
+       src=""
+       alt="avatar" />
 
-  <button class="spin-btn w-full py-4 rounded-xl text-lg font-semibold">
-    🎅 Christmas Spin 🎁
-  </button>
+  <div>
+    <div id="name" class="title text-lg">Loading...</div>
+    <div id="username" class="text-xs opacity-60">@username</div>
+    <div id="userid" class="text-xs opacity-40">ID: —</div>
+  </div>
 </section>
 
 <!-- Stats -->
 <section class="grid grid-cols-3 gap-3">
-  <div class="glass rim rounded-xl p-4 text-center glow-cyan">
-    <div class="text-neonCyan text-xl font-semibold">0</div>
+  <div class="glass rim rounded-lg p-3 text-center">
+    <div class="text-neon font-semibold text-lg" id="waifus">0</div>
     <div class="text-xs opacity-60">WAIFUS</div>
   </div>
-  <div class="glass rim rounded-xl p-4 text-center glow-purple">
-    <div class="text-electricPurple text-xl font-semibold">0</div>
-    <div class="text-xs opacity-60">ECLIPSE</div>
+  <div class="glass rim rounded-lg p-3 text-center">
+    <div class="text-purple font-semibold text-lg">0</div>
+    <div class="text-xs opacity-60">RARITY</div>
   </div>
-  <div class="glass rim rounded-xl p-4 text-center">
-    <div class="text-gachaRed text-xl font-semibold">#455</div>
+  <div class="glass rim rounded-lg p-3 text-center">
+    <div class="text-gold font-semibold text-lg">#—</div>
     <div class="text-xs opacity-60">RANK</div>
   </div>
 </section>
 
-<section class="grid grid-cols-2 gap-3">
-  <div class="glass rim rounded-xl p-4 text-center">
-    <div class="text-neonCyan text-xl font-semibold">0</div>
-    <div class="text-xs opacity-60">ANIME</div>
-  </div>
-  <div class="glass rim rounded-xl p-4 text-center">
-    <div class="text-electricPurple text-xl font-semibold">0%</div>
-    <div class="text-xs opacity-60">COLLECTED</div>
-  </div>
-</section>
+<!-- Action -->
+<button id="catchBtn"
+  class="w-full py-4 rounded-xl font-semibold text-lg
+         bg-gradient-to-r from-purple to-neon">
+  🎯 Catch Waifu
+</button>
 
 <!-- Activity -->
 <section class="glass rim rounded-xl p-4">
-  <div class="title-font text-xs opacity-70">RECENT ACTIVITY</div>
-  <div class="text-center text-sm opacity-40 mt-4">No recent activity</div>
-</section>
-
-<!-- Menu -->
-<section class="space-y-3">
-  <div class="glass rim rounded-xl p-5 flex justify-between items-center hover:scale-[1.02] transition">
-    <div>
-      <div class="title-font">MYVERSE</div>
-      <div class="text-xs opacity-60">Manage your collection</div>
-    </div> 📚
-  </div>
-
-  <div class="glass rim rounded-xl p-5 flex justify-between items-center glow-purple hover:scale-[1.02] transition">
-    <div>
-      <div class="title-font text-electricPurple">FUSION LAB ⚡</div>
-      <div class="text-xs opacity-60">Fuse waifus</div>
-    </div> 🧬
-  </div>
-
-  <div class="glass rim rounded-xl p-5 flex justify-between items-center glow-cyan hover:scale-[1.02] transition">
-    <div>
-      <div class="title-font text-gachaRed">GACHA ★</div>
-      <div class="text-xs opacity-60">Summon rare waifus</div>
-    </div> 💎
+  <div class="title text-xs opacity-70">ACTIVITY</div>
+  <div class="text-center opacity-40 mt-4">
+    No activity yet
   </div>
 </section>
 
-<!-- Favorite -->
-<section class="glass rim rounded-xl p-4">
-  <div class="title-font text-xs opacity-70">FAVORITE WAIFU</div>
-  <div class="text-center opacity-40 mt-4">No favorite set</div>
-</section>
-
-<footer class="text-center text-xs opacity-30 py-4">
-  WAIFUVERSE NEXUS v1.1.1<br>
-  Privacy Policy • Terms • Help
+<footer class="text-center text-xs opacity-30 pt-4">
+  Waifu Catcher Bot • Telegram Mini App
 </footer>
 
 </main>
+
+<script>
+/* ================= TELEGRAM INIT ================= */
+
+const tg = window.Telegram.WebApp;
+tg.expand();
+tg.ready();
+
+const user = tg.initDataUnsafe?.user;
+
+if (!user) {
+  alert("❌ Please open this inside Telegram");
+}
+
+/* ================= USER DATA ================= */
+
+document.getElementById("name").innerText =
+  `${user.first_name || ""} ${user.last_name || ""}`;
+
+document.getElementById("username").innerText =
+  user.username ? `@${user.username}` : "No username";
+
+document.getElementById("userid").innerText =
+  `ID: ${user.id}`;
+
+if (user.photo_url) {
+  document.getElementById("avatar").src = user.photo_url;
+}
+
+/* ================= ACTION ================= */
+
+document.getElementById("catchBtn").onclick = () => {
+  tg.HapticFeedback.impactOccurred("medium");
+
+  // Send data back to bot
+  tg.sendData(JSON.stringify({
+    action: "catch_waifu",
+    user_id: user.id
+  }));
+};
+</script>
+
 </body>
-</html>
+</html
