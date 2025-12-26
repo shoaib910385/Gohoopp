@@ -270,28 +270,24 @@ document.addEventListener("DOMContentLoaded",()=>{
   const tg=Telegram.WebApp;
   tg.expand();tg.ready();
 
-  
   setTimeout(()=>{
-    const u=tg.initDataUnsafe?.user;
-if (!user) {
-  document.body.innerHTML = "❌ Open inside Telegram only";
-  throw new Error("Not Telegram");
+    // Full Telegram display name
+const fullName = [u.first_name, u.last_name].filter(Boolean).join(" ");
+
+name.innerText = fullName || "Telegram User";
+
+// Telegram username (optional)
+username.innerText = u.username ? "@" + u.username : "No username";
+
+// Telegram ID
+userid.innerText = "ID: " + u.id;
+
+// Profile photo
+if (u.photo_url) {
+  avatar.src = u.photo_url;
 }
-
-/* ================= PROFILE ================= */
-document.getElementById("name").innerText =
-  `${user.first_name || ""} ${user.last_name || ""}`;
-
-
-document.getElementById("username").innerText =
-  user.username ? `@${user.username}` : "No username";
-
-document.getElementById("userid").innerText =
-  `ID: ${user.id}`;
-
-if (user.photo_url) {
-  document.getElementById("avatar").src = user.photo_url;
-}
+  },400);
+});
 </script>
 
 </body>
