@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 
-<!-- 🚫 Disable zoom -->
 <meta name="viewport"
 content="width=device-width,height=device-height,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
 
@@ -24,13 +23,13 @@ tailwind.config = {
     extend: {
       colors: {
         night: "#020617",
-        space: "#020b2d",
+        deep: "#020b2d",
         aurora: "#0ea5e9",
         silver: "#cbd5e1",
         gold: "#f5c77a"
       },
       boxShadow: {
-        glow: "0 0 30px rgba(14,165,233,.35)"
+        glow: "0 0 28px rgba(14,165,233,.35)"
       }
     }
   }
@@ -38,16 +37,16 @@ tailwind.config = {
 </script>
 
 <style>
-/* ================= BASE ================= */
 html,body{
   width:100%;
   height:100%;
   overflow:hidden;
   touch-action:manipulation;
+  font-family:'Inter',sans-serif;
 }
 
+/* 🌌 BACKGROUND */
 body{
-  font-family:'Inter',sans-serif;
   background:
     radial-gradient(circle at 30% 15%, rgba(14,165,233,.18), transparent 45%),
     radial-gradient(circle at 70% 85%, rgba(56,189,248,.12), transparent 45%),
@@ -55,15 +54,13 @@ body{
   color:white;
 }
 
-/* ================= PARALLAX GALAXY ================= */
+/* 🌠 MOVING GALAXY */
 .galaxy{
   position:fixed;
   inset:0;
   pointer-events:none;
-  overflow:hidden;
 }
-
-.stars{
+.star-layer{
   position:absolute;
   inset:-50%;
   background-image:
@@ -72,25 +69,22 @@ body{
     radial-gradient(1px 1px at 70% 30%,#fff,transparent),
     radial-gradient(1px 1px at 85% 80%,#fff,transparent);
   opacity:.25;
-  animation: drift 60s linear infinite;
+  animation: drift 80s linear infinite;
 }
-
-.stars.slow{
+.star-layer.slow{
   opacity:.15;
-  animation-duration:120s;
+  animation-duration:160s;
 }
-
 @keyframes drift{
   from{transform:translateY(0)}
-  to{transform:translateY(-400px)}
+  to{transform:translateY(-500px)}
 }
 
-/* ================= GLASS ================= */
+/* ✨ GLASS + RIM */
 .glass{
   background:rgba(255,255,255,.05);
   backdrop-filter:blur(18px);
 }
-
 .rim{
   position:relative;
 }
@@ -107,90 +101,66 @@ body{
   -webkit-mask-composite:xor;
 }
 
-/* ================= TEXT ================= */
+/* 🧠 TEXT */
 .cyber{
   font-family:'Orbitron',sans-serif;
-  letter-spacing:.16em;
+  letter-spacing:.15em;
 }
 
-/* ================= LOADER ================= */
+/* 🔮 LOADER */
 #loader{
   position:fixed;
   inset:0;
   z-index:9999;
   display:flex;
 }
-
-.loader-side{
-  width:50%;
-  background:linear-gradient(180deg,#020617,#020b2d);
-}
-
+.loader-side{width:50%;background:#020617}
 .loader-center{
-  position:absolute;
-  inset:0;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
 }
-
-.loader-title{
-  font-family:'Orbitron',sans-serif;
-  color:#0ea5e9;
-  font-size:22px;
-  text-shadow:0 0 30px #0ea5e9;
-  margin-bottom:18px;
-}
-
 .loader-bar{
-  width:220px;
-  height:4px;
+  width:220px;height:4px;
   background:rgba(255,255,255,.15);
-  border-radius:20px;
-  overflow:hidden;
+  border-radius:20px;overflow:hidden;
 }
-
 .loader-bar span{
-  display:block;
-  height:100%;
-  width:0%;
+  display:block;height:100%;width:0%;
   background:linear-gradient(90deg,#f5c77a,#0ea5e9);
-  animation: load 2s linear forwards;
+  animation:load 2s linear forwards;
 }
-
 @keyframes load{to{width:100%}}
 
-/* ================= APP ================= */
+/* 📱 APP */
 #app{
-  opacity:0;
-  transform:scale(.96);
-  transition:opacity .9s ease,transform .9s ease;
+  opacity:0;transform:scale(.96);
+  transition:.8s ease;
 }
-#app.show{
-  opacity:1;
-  transform:scale(1);
-}
+#app.show{opacity:1;transform:scale(1)}
 
-/* ================= MENU ================= */
+/* ☰ MENU */
 #menu{
-  position:fixed;
-  inset:0;
+  position:fixed;inset:0;
   background:rgba(0,0,0,.55);
   backdrop-filter:blur(10px);
   transform:translateX(-100%);
   transition:.4s ease;
   z-index:9000;
 }
-
 #menu.show{transform:translateX(0)}
-
 .menu-panel{
-  width:85%;
-  max-width:320px;
-  height:100%;
+  width:85%;max-width:320px;height:100%;
   background:linear-gradient(180deg,#020617,#020b2d);
   padding:20px;
+}
+
+/* 🔘 TILE BUTTON */
+.tile{
+  transition:.25s ease;
+}
+.tile:active{
+  transform:translateY(-6px) scale(.98);
 }
 </style>
 </head>
@@ -199,8 +169,8 @@ body{
 
 <!-- 🌌 GALAXY -->
 <div class="galaxy">
-  <div class="stars slow"></div>
-  <div class="stars"></div>
+  <div class="star-layer slow"></div>
+  <div class="star-layer"></div>
 </div>
 
 <!-- 🔮 LOADER -->
@@ -208,7 +178,7 @@ body{
   <div class="loader-side"></div>
   <div class="loader-side"></div>
   <div class="loader-center">
-    <div class="loader-title">WAIFU CATCHER</div>
+    <div class="cyber text-lg text-aurora mb-4">WAIFU CATCHER</div>
     <div class="loader-bar"><span></span></div>
   </div>
 </div>
@@ -216,75 +186,97 @@ body{
 <!-- ☰ MENU -->
 <div id="menu">
   <div class="menu-panel">
-    <div class="flex justify-between items-center mb-6">
+    <div class="flex justify-between mb-6">
       <div class="cyber text-sm">My Profile</div>
       <button onclick="toggleMenu()">✕</button>
     </div>
-    <p class="opacity-60 text-sm">Profile • Inventory • Settings</p>
+    <p class="opacity-70 text-sm">Profile<br>Inventory<br>Settings</p>
   </div>
 </div>
 
 <!-- 📱 APP -->
-<main id="app" class="relative max-w-[420px] mx-auto p-4 space-y-5">
+<main id="app" class="relative max-w-[420px] mx-auto p-4 space-y-5 overflow-y-auto">
 
-<!-- ☰ MENU BUTTON -->
-<button onclick="toggleMenu()" class="absolute top-4 left-4 space-y-1">
+<!-- ☰ MENU BTN -->
+<button onclick="toggleMenu()" class="absolute top-4 left-4 space-y-1 z-10">
   <span class="block w-5 h-[2px] bg-silver"></span>
   <span class="block w-5 h-[2px] bg-silver"></span>
   <span class="block w-5 h-[2px] bg-silver"></span>
 </button>
 
-<header class="text-center cyber text-sm opacity-80">
+<header class="text-center cyber text-sm opacity-80 mt-2">
   WAIFU CATCHER ✨
 </header>
 
-<section class="glass rim rounded-xl p-4 flex gap-4 items-center">
+<!-- 👤 PROFILE (TALL) -->
+<section class="glass rim rounded-xl p-5 flex gap-4 items-center min-h-[110px]">
   <div class="relative">
-    <img id="avatar" class="w-16 h-16 rounded-lg object-cover shadow-glow">
+    <img id="avatar" class="w-20 h-20 rounded-lg object-cover shadow-glow">
     <div class="absolute inset-0 rounded-lg ring-1 ring-gold"></div>
   </div>
   <div>
     <div id="name" class="cyber text-lg">Player</div>
-    <div id="username" class="text-xs opacity-60">@user</div>
+    <div id="username" class="text-sm opacity-60">@user</div>
     <div id="userid" class="text-xs opacity-40">ID: —</div>
+  </div>
+</section>
+
+<!-- 🔘 SCROLLABLE ACTIONS -->
+<section class="space-y-4 pb-8">
+  <div class="glass rim rounded-xl p-4 tile" onclick="tap('myverse')">
+    <div class="cyber text-lg">MYVERSE ▾</div>
+    <div class="opacity-60 text-sm">Manage your collection</div>
+  </div>
+
+  <div class="glass rim rounded-xl p-4 tile" onclick="tap('fusion')">
+    <div class="cyber text-lg text-aurora">FUSION LAB ⚡</div>
+    <div class="opacity-60 text-sm">Fuse waifus for upgrades</div>
+  </div>
+
+  <div class="glass rim rounded-xl p-4 tile" onclick="tap('gacha')">
+    <div class="cyber text-lg text-gold">GACHA ✦</div>
+    <div class="opacity-60 text-sm">Summon rare waifus</div>
   </div>
 </section>
 
 </main>
 
-<!-- 🔊 BOOT SOUND -->
-<audio id="bootSound">
-  <source src="https://assets.mixkit.co/sfx/preview/mixkit-sci-fi-interface-zoom-890.mp3">
-</audio>
+<!-- 🔊 SOUND -->
+<audio id="bootSound" src="https://assets.mixkit.co/sfx/preview/mixkit-sci-fi-interface-zoom-890.mp3"></audio>
+<audio id="tapSound" src="https://assets.mixkit.co/sfx/preview/mixkit-interface-click-1126.mp3"></audio>
 
 <script>
 function toggleMenu(){
   document.getElementById("menu").classList.toggle("show");
 }
 
-document.addEventListener("DOMContentLoaded",()=>{
-  const loader=document.getElementById("loader");
-  const app=document.getElementById("app");
-  const sound=document.getElementById("bootSound");
+function tap(action){
+  document.getElementById("tapSound").play().catch(()=>{});
+  if(window.Telegram?.WebApp){
+    Telegram.WebApp.HapticFeedback.impactOccurred("medium");
+    Telegram.WebApp.sendData(JSON.stringify({action}));
+  }
+}
 
+document.addEventListener("DOMContentLoaded",()=>{
   setTimeout(()=>{
     loader.remove();
     app.classList.add("show");
-    sound.volume=.4;
-    sound.play().catch(()=>{});
+    bootSound.volume=.4;
+    bootSound.play().catch(()=>{});
   },2000);
 
-  if(!window.Telegram||!Telegram.WebApp)return;
+  if(!window.Telegram?.WebApp) return;
   const tg=Telegram.WebApp;
   tg.expand();tg.ready();
 
   setTimeout(()=>{
     const u=tg.initDataUnsafe?.user;
-    if(!u)return;
+    if(!u) return;
     name.innerText=u.first_name||"Player";
     username.innerText=u.username?"@"+u.username:"No username";
     userid.innerText="ID: "+u.id;
-    if(u.photo_url)avatar.src=u.photo_url;
+    if(u.photo_url) avatar.src=u.photo_url;
   },400);
 });
 </script>
