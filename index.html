@@ -2,88 +2,10 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Waifu Catcher</title>
 
-<!-- Telegram WebApp SDK -->
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
-
-<!-- Fonts -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
-
-<!-- Tailwind CDN -->
-<script src="https://cdn.tailwindcss.com"></script>
-
-<script>
-tailwind.config = {
-  theme: {
-    extend: {
-      colors: {
-        neon: "#00F2FF",
-        purple: "#BF00FF",
-        gold: "#FFD36A",
-        danger: "#FF0055",
-        dark: "#050014"
-      }
-    }
-  }
-}
-</script>
-
-<style>
-body {
-  font-family: 'Inter', sans-serif;
-  background:
-    radial-gradient(circle at top, rgba(191,0,255,.18), transparent 40%),
-    radial-gradient(circle at bottom, #070018, #02010a 60%);
-}
-
-/* Glass card */
-.glass {
-  background: rgba(255,255,255,.07);
-  backdrop-filter: blur(14px);
-}
-
-/* Gradient border */
-.rim {
-  position: relative;
-}
-.rim::before {
-  content:"";
-  position:absolute;
-  inset:0;
-  border-radius:18px;
-  padding:1px;
-  background: linear-gradient(135deg, #bf00ff, #00f2ff, #ffd36a);
-  -webkit-mask:
-    linear-gradient(#000 0 0) content-box,
-    linear-gradient(#000 0 0);
-  -webkit-mask-composite:xor;
-  pointer-events:none;
-}
-
-/* Title font */
-.title {
-  font-family: 'Orbitron', sans-serif;
-  letter-spacing: .14em;
-}
-</style>
-</head>
-
-<body class="text-white">
-
-<main class="max-w-[420px] mx-auto p-4 space-y-4">
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Waifu Catcher</title>
-
-<!-- Telegram WebApp -->
+<!-- Telegram SDK -->
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <!-- Fonts -->
@@ -103,7 +25,7 @@ tailwind.config = {
         abyss: "#02010A"
       },
       boxShadow: {
-        glow: "0 0 25px rgba(191,0,255,.45)"
+        glow: "0 0 25px rgba(191,0,255,.5)"
       }
     }
   }
@@ -111,52 +33,52 @@ tailwind.config = {
 </script>
 
 <style>
-/* ================= GLOBAL ================= */
-body {
-  font-family: 'Inter', sans-serif;
+/* ================= BACKGROUND ================= */
+body{
+  margin:0;
+  font-family:'Inter',sans-serif;
   background:
     radial-gradient(circle at 20% 10%, rgba(191,0,255,.25), transparent 40%),
     radial-gradient(circle at 80% 90%, rgba(0,242,255,.15), transparent 40%),
-    linear-gradient(180deg, #040014, #02010a);
-  overflow-x: hidden;
+    linear-gradient(180deg,#040014,#02010a);
+  color:white;
+  overflow-x:hidden;
 }
 
-/* animated stars */
-body::before {
+/* stars */
+body::before{
   content:"";
   position:fixed;
   inset:0;
   background-image:
-    radial-gradient(2px 2px at 20% 30%, #fff, transparent),
-    radial-gradient(2px 2px at 80% 70%, #fff, transparent),
-    radial-gradient(1px 1px at 50% 50%, #fff, transparent);
+    radial-gradient(1px 1px at 30% 20%,#fff,transparent),
+    radial-gradient(1px 1px at 70% 80%,#fff,transparent),
+    radial-gradient(1px 1px at 50% 50%,#fff,transparent);
   opacity:.15;
-  animation: drift 30s linear infinite;
+  animation: drift 35s linear infinite;
   pointer-events:none;
 }
-
-@keyframes drift {
-  from { transform: translateY(0); }
-  to { transform: translateY(-200px); }
+@keyframes drift{
+  from{transform:translateY(0)}
+  to{transform:translateY(-200px)}
 }
 
 /* ================= GLASS ================= */
-.glass {
-  background: rgba(255,255,255,.06);
-  backdrop-filter: blur(18px);
+.glass{
+  background:rgba(255,255,255,.06);
+  backdrop-filter:blur(18px);
 }
 
-/* neon border */
-.rim {
-  position: relative;
+.rim{
+  position:relative;
 }
-.rim::before {
+.rim::before{
   content:"";
   position:absolute;
   inset:0;
-  border-radius:18px;
   padding:1px;
-  background: linear-gradient(135deg,#bf00ff,#00f2ff,#ffd36a);
+  border-radius:18px;
+  background:linear-gradient(135deg,#bf00ff,#00f2ff,#ffd36a);
   -webkit-mask:
     linear-gradient(#000 0 0) content-box,
     linear-gradient(#000 0 0);
@@ -164,57 +86,58 @@ body::before {
   pointer-events:none;
 }
 
-/* title */
-.cyber {
+.cyber{
   font-family:'Orbitron',sans-serif;
   letter-spacing:.18em;
 }
 
-/* ================= LOADING ================= */
-#loader {
+/* ================= LOADER ================= */
+#loader{
   position:fixed;
   inset:0;
-  background:linear-gradient(90deg,#02010a,#05001a,#02010a);
   display:flex;
   align-items:center;
   justify-content:center;
-  z-index:999;
+  background:linear-gradient(90deg,#02010a,#060020,#02010a);
+  z-index:9999;
 }
 
-.loader-text {
+.loader-text{
   font-family:'Orbitron',sans-serif;
   font-size:22px;
   color:#bf00ff;
-  text-shadow:0 0 20px #bf00ff;
-  animation:pulse 1.4s infinite alternate;
+  text-shadow:0 0 25px #bf00ff;
+  animation:pulse 1.3s infinite alternate;
 }
 
-@keyframes pulse {
-  from { opacity:.4; }
-  to { opacity:1; }
+@keyframes pulse{
+  from{opacity:.4}
+  to{opacity:1}
 }
 
-/* fade in app */
-.fade-in {
-  animation: fade .9s ease forwards;
+/* ================= APP FADE ================= */
+#app{
+  opacity:0;
+  transform:scale(.98);
+  transition:opacity .8s ease, transform .8s ease;
 }
-@keyframes fade {
-  from { opacity:0; transform:scale(.98); }
-  to { opacity:1; transform:scale(1); }
+#app.show{
+  opacity:1;
+  transform:scale(1);
 }
 </style>
 </head>
 
-<body class="text-white">
+<body>
 
-<!-- LOADER -->
+<!-- SPLIT LOADER -->
 <div id="loader">
   <div class="loader-text">WAIFU CATCHER</div>
 </div>
 
-<main id="app" class="max-w-[420px] mx-auto p-4 space-y-5 opacity-0">
+<!-- MAIN APP -->
+<main id="app" class="max-w-[420px] mx-auto p-4 space-y-5">
 
-<!-- HEADER -->
 <header class="text-center cyber text-sm opacity-80">
   WAIFU CATCHER ✨
 </header>
@@ -222,7 +145,7 @@ body::before {
 <!-- PROFILE -->
 <section class="glass rim rounded-xl p-4 relative flex gap-4 items-center">
 
-  <!-- menu icon -->
+  <!-- menu -->
   <div class="absolute top-3 right-4 space-y-1">
     <span class="block w-5 h-[2px] bg-violet"></span>
     <span class="block w-5 h-[2px] bg-violet"></span>
@@ -231,14 +154,12 @@ body::before {
 
   <!-- avatar -->
   <div class="relative">
-    <img id="avatar"
-      class="w-16 h-16 object-cover rounded-lg shadow-glow"
-      alt="avatar">
+    <img id="avatar" class="w-16 h-16 rounded-lg object-cover shadow-glow">
     <div class="absolute inset-0 rounded-lg ring-1 ring-violet"></div>
   </div>
 
   <div>
-    <div id="name" class="cyber text-lg">—</div>
+    <div id="name" class="cyber text-lg">Loading</div>
     <div id="username" class="text-xs opacity-60">@user</div>
     <div id="userid" class="text-xs opacity-40">ID: —</div>
   </div>
@@ -260,20 +181,14 @@ body::before {
   </div>
 </section>
 
-<!-- ACTION -->
-<button id="catch"
-  class="w-full py-4 rounded-xl cyber
-         bg-gradient-to-r from-violet to-neon shadow-glow">
+<button id="catch" class="w-full py-4 rounded-xl cyber bg-gradient-to-r from-violet to-neon shadow-glow">
   🎯 CATCH WAIFU
 </button>
 
-<button id="bonus"
-  class="w-full py-4 rounded-xl cyber text-black
-         bg-gradient-to-r from-gold to-yellow-400">
+<button id="bonus" class="w-full py-4 rounded-xl cyber text-black bg-gradient-to-r from-gold to-yellow-400">
   ✨ DAILY BONUS
 </button>
 
-<!-- ACTIVITY -->
 <section class="glass rim rounded-xl p-4">
   <div class="cyber text-xs opacity-60">RECENT ACTIVITY</div>
   <div id="activity" class="text-center opacity-40 mt-4">
@@ -282,7 +197,7 @@ body::before {
 </section>
 
 <footer class="text-center text-xs opacity-30 pt-4">
-  Waifu Catcher • Neon Nexus v1.0
+  Waifu Catcher • Neon Nexus
 </footer>
 
 </main>
@@ -290,44 +205,45 @@ body::before {
 <script>
 /* ================= TELEGRAM ================= */
 const tg = window.Telegram.WebApp;
-tg.expand(); tg.ready();
+tg.expand();
+tg.ready();
 
 const user = tg.initDataUnsafe?.user;
 if(!user){
-  document.body.innerHTML="Open inside Telegram";
+  document.body.innerHTML = "Open inside Telegram";
   throw "";
 }
 
-/* profile */
+/* user data */
 name.innerText = user.first_name || "Player";
 username.innerText = user.username ? "@"+user.username : "No username";
-userid.innerText = "ID: "+user.id;
+userid.innerText = "ID: " + user.id;
 if(user.photo_url) avatar.src = user.photo_url;
 
-/* fake stats */
+/* demo stats */
 coins.innerText = "80";
 waifus.innerText = "0";
 rank.innerText = "#462";
 
-/* buttons */
+/* actions */
 catch.onclick = ()=>{
   tg.HapticFeedback.impactOccurred("medium");
-  tg.sendData(JSON.stringify({action:"catch"}));
-  activity.innerText="🎯 Catch initiated...";
+  tg.sendData(JSON.stringify({action:"catch_waifu"}));
+  activity.innerText = "🎯 Catch request sent...";
 };
 
 bonus.onclick = ()=>{
   tg.HapticFeedback.impactOccurred("light");
-  tg.sendData(JSON.stringify({action:"bonus"}));
-  activity.innerText="✨ Bonus claimed...";
+  tg.sendData(JSON.stringify({action:"daily_bonus"}));
+  activity.innerText = "✨ Bonus claimed...";
 };
 
-/* loading */
+/* ================= LOADER FIX ================= */
 setTimeout(()=>{
-  loader.style.display="none";
-  app.classList.add("fade-in");
-  app.style.opacity=1;
-},1200);
+  const loader = document.getElementById("loader");
+  loader.remove();                 // 🔥 force remove
+  document.getElementById("app").classList.add("show");
+}, 2000); // EXACT 2 SECONDS
 </script>
 
 </body>
