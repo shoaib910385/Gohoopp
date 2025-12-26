@@ -271,21 +271,12 @@ document.addEventListener("DOMContentLoaded",()=>{
   tg.expand();tg.ready();
 
   setTimeout(()=>{
-    // Full Telegram display name
-const fullName = [u.first_name, u.last_name].filter(Boolean).join(" ");
-
-name.innerText = fullName || "Telegram User";
-
-// Telegram username (optional)
-username.innerText = u.username ? "@" + u.username : "No username";
-
-// Telegram ID
-userid.innerText = "ID: " + u.id;
-
-// Profile photo
-if (u.photo_url) {
-  avatar.src = u.photo_url;
-}
+    const u=tg.initDataUnsafe?.user;
+    if(!u) return;
+    name.innerText=u.first_name||"Player";
+    username.innerText=u.username?"@"+u.username:"No username";
+    userid.innerText="ID: "+u.id;
+    if(u.photo_url) avatar.src=u.photo_url;
   },400);
 });
 </script>
