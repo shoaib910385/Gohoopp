@@ -1,11 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+
+<!-- 🚫 Disable zoom (important for Telegram Mini Apps) -->
+<meta name="viewport"
+  content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
 <title>Waifu Catcher</title>
 
-<!-- Telegram -->
+<!-- Telegram SDK -->
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <!-- Fonts -->
@@ -19,13 +23,14 @@ tailwind.config = {
   theme: {
     extend: {
       colors: {
-        neon: "#8b5cf6",
-        violet: "#a855f7",
-        deep: "#030014",
+        aurora1: "#a855f7",
+        aurora2: "#7c3aed",
+        aurora3: "#5b21b6",
+        deep: "#020014",
         gold: "#facc15"
       },
       boxShadow: {
-        glow: "0 0 30px rgba(168,85,247,.5)"
+        glow: "0 0 28px rgba(168,85,247,.55)"
       }
     }
   }
@@ -33,36 +38,41 @@ tailwind.config = {
 </script>
 
 <style>
-/* ================= BACKGROUND ================= */
-body{
-  margin:0;
-  font-family:'Inter',sans-serif;
-  background:
-    radial-gradient(circle at 20% 10%, rgba(168,85,247,.35), transparent 45%),
-    radial-gradient(circle at 80% 90%, rgba(139,92,246,.25), transparent 45%),
-    linear-gradient(180deg,#05001c,#020012);
-  color:white;
-  overflow-x:hidden;
+/* ================= BASE ================= */
+html, body {
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  touch-action: manipulation;
 }
 
-/* galaxy stars */
+body{
+  font-family:'Inter',sans-serif;
+  background:
+    radial-gradient(circle at 20% 15%, rgba(168,85,247,.35), transparent 45%),
+    radial-gradient(circle at 80% 85%, rgba(124,58,237,.25), transparent 45%),
+    linear-gradient(180deg,#04001a,#020014);
+  color:white;
+}
+
+/* ================= GALAXY STARS ================= */
 body::before{
   content:"";
   position:fixed;
   inset:0;
   background-image:
-    radial-gradient(1px 1px at 15% 30%, #fff, transparent),
-    radial-gradient(1px 1px at 50% 60%, #fff, transparent),
-    radial-gradient(1px 1px at 80% 20%, #fff, transparent),
-    radial-gradient(1px 1px at 70% 80%, #fff, transparent);
+    radial-gradient(1px 1px at 10% 20%, #fff, transparent),
+    radial-gradient(1px 1px at 40% 60%, #fff, transparent),
+    radial-gradient(1px 1px at 70% 30%, #fff, transparent),
+    radial-gradient(1px 1px at 85% 80%, #fff, transparent);
   opacity:.18;
-  animation: stars 40s linear infinite;
+  animation: stars 45s linear infinite;
   pointer-events:none;
 }
 
-@keyframes stars{
-  from{transform:translateY(0)}
-  to{transform:translateY(-300px)}
+@keyframes stars {
+  from { transform: translateY(0); }
+  to   { transform: translateY(-320px); }
 }
 
 /* ================= GLASS ================= */
@@ -80,64 +90,85 @@ body::before{
   inset:0;
   padding:1px;
   border-radius:18px;
-  background:linear-gradient(135deg,#a855f7,#8b5cf6,#facc15);
+  background:linear-gradient(135deg,#a855f7,#7c3aed,#facc15);
   -webkit-mask:
     linear-gradient(#000 0 0) content-box,
     linear-gradient(#000 0 0);
   -webkit-mask-composite:xor;
-  pointer-events:none;
 }
 
+/* ================= TEXT ================= */
 .cyber{
   font-family:'Orbitron',sans-serif;
   letter-spacing:.18em;
 }
 
-/* ================= LOADER ================= */
+/* ================= LOADER (MILKY WAY SPLIT) ================= */
 #loader{
   position:fixed;
   inset:0;
-  background:linear-gradient(90deg,#020012,#06002a,#020012);
+  z-index:9999;
+  display:flex;
+}
+
+.loader-left,
+.loader-right{
+  width:50%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+.loader-left{
+  background:linear-gradient(180deg,#020014,#06002c);
+}
+
+.loader-right{
+  background:linear-gradient(180deg,#06002c,#020014);
+}
+
+.loader-center{
+  position:absolute;
+  inset:0;
   display:flex;
   flex-direction:column;
   justify-content:center;
   align-items:center;
-  z-index:9999;
 }
 
 .loader-title{
   font-family:'Orbitron',sans-serif;
-  font-size:22px;
   color:#a855f7;
-  text-shadow:0 0 25px #a855f7;
-  margin-bottom:20px;
+  font-size:22px;
+  text-shadow:0 0 30px #a855f7;
+  margin-bottom:18px;
 }
 
-.progress-wrap{
-  width:180px;
+.loader-bar{
+  width:200px;
   height:4px;
   background:rgba(255,255,255,.15);
+  border-radius:20px;
   overflow:hidden;
-  border-radius:10px;
 }
 
-.progress-bar{
-  width:0%;
+.loader-bar span{
+  display:block;
   height:100%;
-  background:linear-gradient(90deg,#a855f7,#8b5cf6);
-  animation: loadbar 2s linear forwards;
+  width:0%;
+  background:linear-gradient(90deg,#a855f7,#7c3aed);
+  animation: load 2s linear forwards;
 }
 
-@keyframes loadbar{
-  from{width:0%}
-  to{width:100%}
+@keyframes load {
+  to { width:100%; }
 }
 
 /* ================= APP ================= */
 #app{
   opacity:0;
-  transform:scale(.97);
-  transition:opacity .8s ease, transform .8s ease;
+  transform:scale(.96);
+  transition:opacity .9s ease, transform .9s ease;
 }
 
 #app.show{
@@ -149,47 +180,57 @@ body::before{
 
 <body>
 
-<!-- LOADER -->
+<!-- 🔮 SPLIT LOADER -->
 <div id="loader">
-  <div class="loader-title">WAIFU CATCHER</div>
-  <div class="progress-wrap">
-    <div class="progress-bar"></div>
+  <div class="loader-left"></div>
+  <div class="loader-right"></div>
+
+  <div class="loader-center">
+    <div class="loader-title">WAIFU CATCHER</div>
+    <div class="loader-bar"><span></span></div>
   </div>
 </div>
 
-<!-- MAIN APP -->
+<!-- 📱 MAIN MINI APP -->
 <main id="app" class="max-w-[420px] mx-auto p-4 space-y-5">
 
 <header class="text-center cyber text-sm opacity-80">
   WAIFU CATCHER ✨
 </header>
 
+<!-- PROFILE -->
 <section class="glass rim rounded-xl p-4 relative flex gap-4 items-center">
+
+  <!-- MENU -->
   <div class="absolute top-3 right-4 space-y-1">
-    <span class="block w-5 h-[2px] bg-violet"></span>
-    <span class="block w-5 h-[2px] bg-violet"></span>
-    <span class="block w-5 h-[2px] bg-violet"></span>
+    <span class="block w-5 h-[2px] bg-aurora1"></span>
+    <span class="block w-5 h-[2px] bg-aurora1"></span>
+    <span class="block w-5 h-[2px] bg-aurora1"></span>
   </div>
 
+  <!-- AVATAR -->
   <div class="relative">
-    <img id="avatar" class="w-16 h-16 rounded-lg object-cover shadow-glow">
-    <div class="absolute inset-0 rounded-lg ring-1 ring-violet"></div>
+    <img id="avatar"
+      class="w-16 h-16 rounded-lg object-cover shadow-glow"
+      alt="avatar" />
+    <div class="absolute inset-0 rounded-lg ring-1 ring-aurora1"></div>
   </div>
 
   <div>
-    <div id="name" class="cyber text-lg">—</div>
+    <div id="name" class="cyber text-lg">Player</div>
     <div id="username" class="text-xs opacity-60">@user</div>
     <div id="userid" class="text-xs opacity-40">ID: —</div>
   </div>
 </section>
 
+<!-- STATS -->
 <section class="grid grid-cols-3 gap-3">
   <div class="glass rim rounded-lg p-3 text-center">
-    <div id="coins" class="text-neon text-lg font-semibold">0</div>
+    <div id="coins" class="text-aurora1 text-lg font-semibold">0</div>
     <div class="text-xs opacity-60">NEXUS</div>
   </div>
   <div class="glass rim rounded-lg p-3 text-center">
-    <div id="waifus" class="text-violet text-lg font-semibold">0</div>
+    <div id="waifus" class="text-aurora2 text-lg font-semibold">0</div>
     <div class="text-xs opacity-60">WAIFUS</div>
   </div>
   <div class="glass rim rounded-lg p-3 text-center">
@@ -198,11 +239,13 @@ body::before{
   </div>
 </section>
 
-<button id="catch" class="w-full py-4 rounded-xl cyber bg-gradient-to-r from-violet to-neon shadow-glow">
+<button id="catch"
+  class="w-full py-4 rounded-xl cyber bg-gradient-to-r from-aurora1 to-aurora2 shadow-glow">
   🎯 CATCH WAIFU
 </button>
 
-<button id="bonus" class="w-full py-4 rounded-xl cyber text-black bg-gradient-to-r from-gold to-yellow-400">
+<button id="bonus"
+  class="w-full py-4 rounded-xl cyber text-black bg-gradient-to-r from-gold to-yellow-400">
   ✨ DAILY BONUS
 </button>
 
@@ -214,54 +257,45 @@ body::before{
 </section>
 
 <footer class="text-center text-xs opacity-30 pt-4">
-  Waifu Catcher • Galaxy Nexus
+  Waifu Catcher • Galaxy Aurora
 </footer>
 
 </main>
 
 <script>
-/* ================= SAFE INIT ================= */
+/* ================= TELEGRAM-SAFE INIT ================= */
 document.addEventListener("DOMContentLoaded", () => {
 
   const loader = document.getElementById("loader");
   const app = document.getElementById("app");
 
-  const tg = window.Telegram.WebApp;
-  tg.expand();
-  tg.ready();
-
-  const user = tg.initDataUnsafe?.user;
-  if(!user){
-    document.body.innerHTML = "Open inside Telegram";
-    return;
-  }
-
-  name.innerText = user.first_name || "Player";
-  username.innerText = user.username ? "@"+user.username : "No username";
-  userid.innerText = "ID: " + user.id;
-  if(user.photo_url) avatar.src = user.photo_url;
-
-  coins.innerText = "80";
-  waifus.innerText = "0";
-  rank.innerText = "#462";
-
-  catch.onclick = ()=>{
-    tg.HapticFeedback.impactOccurred("medium");
-    tg.sendData(JSON.stringify({action:"catch_waifu"}));
-    activity.innerText="🎯 Catch initiated...";
-  };
-
-  bonus.onclick = ()=>{
-    tg.HapticFeedback.impactOccurred("light");
-    tg.sendData(JSON.stringify({action:"daily_bonus"}));
-    activity.innerText="✨ Bonus claimed...";
-  };
-
-  /* 🔥 GUARANTEED TRANSITION */
+  /* 🔥 FORCE SHOW HOME AFTER 2s (NO DEPENDENCIES) */
   setTimeout(() => {
     loader.remove();
     app.classList.add("show");
-  }, 2000); // EXACT 2 SECONDS
+  }, 2000);
+
+  /* Telegram (optional, never blocking) */
+  if (!window.Telegram || !Telegram.WebApp) return;
+
+  const tg = Telegram.WebApp;
+  tg.expand();
+  tg.ready();
+
+  setTimeout(() => {
+    const user = tg.initDataUnsafe?.user;
+    if (!user) return;
+
+    document.getElementById("name").innerText =
+      user.first_name || "Player";
+    document.getElementById("username").innerText =
+      user.username ? "@"+user.username : "No username";
+    document.getElementById("userid").innerText =
+      "ID: "+user.id;
+    if (user.photo_url)
+      document.getElementById("avatar").src = user.photo_url;
+  }, 400);
+
 });
 </script>
 
