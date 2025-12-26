@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
+<meta charset="UTF-8">
 
-<!-- 🚫 Disable zoom (important for Telegram Mini Apps) -->
+<!-- 🚫 Disable zoom -->
 <meta name="viewport"
-  content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+content="width=device-width,height=device-height,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
 
 <title>Waifu Catcher</title>
 
@@ -23,14 +23,14 @@ tailwind.config = {
   theme: {
     extend: {
       colors: {
-        aurora1: "#a855f7",
-        aurora2: "#7c3aed",
-        aurora3: "#5b21b6",
-        deep: "#020014",
-        gold: "#facc15"
+        night: "#020617",
+        space: "#020b2d",
+        aurora: "#0ea5e9",
+        silver: "#cbd5e1",
+        gold: "#f5c77a"
       },
       boxShadow: {
-        glow: "0 0 28px rgba(168,85,247,.55)"
+        glow: "0 0 30px rgba(14,165,233,.35)"
       }
     }
   }
@@ -39,45 +39,55 @@ tailwind.config = {
 
 <style>
 /* ================= BASE ================= */
-html, body {
+html,body{
   width:100%;
   height:100%;
   overflow:hidden;
-  touch-action: manipulation;
+  touch-action:manipulation;
 }
 
 body{
   font-family:'Inter',sans-serif;
   background:
-    radial-gradient(circle at 20% 15%, rgba(168,85,247,.35), transparent 45%),
-    radial-gradient(circle at 80% 85%, rgba(124,58,237,.25), transparent 45%),
-    linear-gradient(180deg,#04001a,#020014);
+    radial-gradient(circle at 30% 15%, rgba(14,165,233,.18), transparent 45%),
+    radial-gradient(circle at 70% 85%, rgba(56,189,248,.12), transparent 45%),
+    linear-gradient(180deg,#020617,#020b2d);
   color:white;
 }
 
-/* ================= GALAXY STARS ================= */
-body::before{
-  content:"";
+/* ================= PARALLAX GALAXY ================= */
+.galaxy{
   position:fixed;
   inset:0;
-  background-image:
-    radial-gradient(1px 1px at 10% 20%, #fff, transparent),
-    radial-gradient(1px 1px at 40% 60%, #fff, transparent),
-    radial-gradient(1px 1px at 70% 30%, #fff, transparent),
-    radial-gradient(1px 1px at 85% 80%, #fff, transparent);
-  opacity:.18;
-  animation: stars 45s linear infinite;
   pointer-events:none;
+  overflow:hidden;
 }
 
-@keyframes stars {
-  from { transform: translateY(0); }
-  to   { transform: translateY(-320px); }
+.stars{
+  position:absolute;
+  inset:-50%;
+  background-image:
+    radial-gradient(1px 1px at 10% 20%,#fff,transparent),
+    radial-gradient(1px 1px at 40% 60%,#fff,transparent),
+    radial-gradient(1px 1px at 70% 30%,#fff,transparent),
+    radial-gradient(1px 1px at 85% 80%,#fff,transparent);
+  opacity:.25;
+  animation: drift 60s linear infinite;
+}
+
+.stars.slow{
+  opacity:.15;
+  animation-duration:120s;
+}
+
+@keyframes drift{
+  from{transform:translateY(0)}
+  to{transform:translateY(-400px)}
 }
 
 /* ================= GLASS ================= */
 .glass{
-  background:rgba(255,255,255,.06);
+  background:rgba(255,255,255,.05);
   backdrop-filter:blur(18px);
 }
 
@@ -90,7 +100,7 @@ body::before{
   inset:0;
   padding:1px;
   border-radius:18px;
-  background:linear-gradient(135deg,#a855f7,#7c3aed,#facc15);
+  background:linear-gradient(135deg,#f5c77a,#cbd5e1,#0ea5e9);
   -webkit-mask:
     linear-gradient(#000 0 0) content-box,
     linear-gradient(#000 0 0);
@@ -100,10 +110,10 @@ body::before{
 /* ================= TEXT ================= */
 .cyber{
   font-family:'Orbitron',sans-serif;
-  letter-spacing:.18em;
+  letter-spacing:.16em;
 }
 
-/* ================= LOADER (MILKY WAY SPLIT) ================= */
+/* ================= LOADER ================= */
 #loader{
   position:fixed;
   inset:0;
@@ -111,20 +121,9 @@ body::before{
   display:flex;
 }
 
-.loader-left,
-.loader-right{
+.loader-side{
   width:50%;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-}
-
-.loader-left{
-  background:linear-gradient(180deg,#020014,#06002c);
-}
-
-.loader-right{
-  background:linear-gradient(180deg,#06002c,#020014);
+  background:linear-gradient(180deg,#020617,#020b2d);
 }
 
 .loader-center{
@@ -138,14 +137,14 @@ body::before{
 
 .loader-title{
   font-family:'Orbitron',sans-serif;
-  color:#a855f7;
+  color:#0ea5e9;
   font-size:22px;
-  text-shadow:0 0 30px #a855f7;
+  text-shadow:0 0 30px #0ea5e9;
   margin-bottom:18px;
 }
 
 .loader-bar{
-  width:200px;
+  width:220px;
   height:4px;
   background:rgba(255,255,255,.15);
   border-radius:20px;
@@ -156,66 +155,94 @@ body::before{
   display:block;
   height:100%;
   width:0%;
-  background:linear-gradient(90deg,#a855f7,#7c3aed);
+  background:linear-gradient(90deg,#f5c77a,#0ea5e9);
   animation: load 2s linear forwards;
 }
 
-@keyframes load {
-  to { width:100%; }
-}
+@keyframes load{to{width:100%}}
 
 /* ================= APP ================= */
 #app{
   opacity:0;
   transform:scale(.96);
-  transition:opacity .9s ease, transform .9s ease;
+  transition:opacity .9s ease,transform .9s ease;
 }
-
 #app.show{
   opacity:1;
   transform:scale(1);
+}
+
+/* ================= MENU ================= */
+#menu{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.55);
+  backdrop-filter:blur(10px);
+  transform:translateX(-100%);
+  transition:.4s ease;
+  z-index:9000;
+}
+
+#menu.show{transform:translateX(0)}
+
+.menu-panel{
+  width:85%;
+  max-width:320px;
+  height:100%;
+  background:linear-gradient(180deg,#020617,#020b2d);
+  padding:20px;
 }
 </style>
 </head>
 
 <body>
 
-<!-- 🔮 SPLIT LOADER -->
-<div id="loader">
-  <div class="loader-left"></div>
-  <div class="loader-right"></div>
+<!-- 🌌 GALAXY -->
+<div class="galaxy">
+  <div class="stars slow"></div>
+  <div class="stars"></div>
+</div>
 
+<!-- 🔮 LOADER -->
+<div id="loader">
+  <div class="loader-side"></div>
+  <div class="loader-side"></div>
   <div class="loader-center">
     <div class="loader-title">WAIFU CATCHER</div>
     <div class="loader-bar"><span></span></div>
   </div>
 </div>
 
-<!-- 📱 MAIN MINI APP -->
-<main id="app" class="max-w-[420px] mx-auto p-4 space-y-5">
+<!-- ☰ MENU -->
+<div id="menu">
+  <div class="menu-panel">
+    <div class="flex justify-between items-center mb-6">
+      <div class="cyber text-sm">My Profile</div>
+      <button onclick="toggleMenu()">✕</button>
+    </div>
+    <p class="opacity-60 text-sm">Profile • Inventory • Settings</p>
+  </div>
+</div>
+
+<!-- 📱 APP -->
+<main id="app" class="relative max-w-[420px] mx-auto p-4 space-y-5">
+
+<!-- ☰ MENU BUTTON -->
+<button onclick="toggleMenu()" class="absolute top-4 left-4 space-y-1">
+  <span class="block w-5 h-[2px] bg-silver"></span>
+  <span class="block w-5 h-[2px] bg-silver"></span>
+  <span class="block w-5 h-[2px] bg-silver"></span>
+</button>
 
 <header class="text-center cyber text-sm opacity-80">
   WAIFU CATCHER ✨
 </header>
 
-<!-- PROFILE -->
-<section class="glass rim rounded-xl p-4 relative flex gap-4 items-center">
-
-  <!-- MENU -->
-  <div class="absolute top-3 right-4 space-y-1">
-    <span class="block w-5 h-[2px] bg-aurora1"></span>
-    <span class="block w-5 h-[2px] bg-aurora1"></span>
-    <span class="block w-5 h-[2px] bg-aurora1"></span>
-  </div>
-
-  <!-- AVATAR -->
+<section class="glass rim rounded-xl p-4 flex gap-4 items-center">
   <div class="relative">
-    <img id="avatar"
-      class="w-16 h-16 rounded-lg object-cover shadow-glow"
-      alt="avatar" />
-    <div class="absolute inset-0 rounded-lg ring-1 ring-aurora1"></div>
+    <img id="avatar" class="w-16 h-16 rounded-lg object-cover shadow-glow">
+    <div class="absolute inset-0 rounded-lg ring-1 ring-gold"></div>
   </div>
-
   <div>
     <div id="name" class="cyber text-lg">Player</div>
     <div id="username" class="text-xs opacity-60">@user</div>
@@ -223,79 +250,42 @@ body::before{
   </div>
 </section>
 
-<!-- STATS -->
-<section class="grid grid-cols-3 gap-3">
-  <div class="glass rim rounded-lg p-3 text-center">
-    <div id="coins" class="text-aurora1 text-lg font-semibold">0</div>
-    <div class="text-xs opacity-60">NEXUS</div>
-  </div>
-  <div class="glass rim rounded-lg p-3 text-center">
-    <div id="waifus" class="text-aurora2 text-lg font-semibold">0</div>
-    <div class="text-xs opacity-60">WAIFUS</div>
-  </div>
-  <div class="glass rim rounded-lg p-3 text-center">
-    <div id="rank" class="text-gold text-lg font-semibold">#---</div>
-    <div class="text-xs opacity-60">RANK</div>
-  </div>
-</section>
-
-<button id="catch"
-  class="w-full py-4 rounded-xl cyber bg-gradient-to-r from-aurora1 to-aurora2 shadow-glow">
-  🎯 CATCH WAIFU
-</button>
-
-<button id="bonus"
-  class="w-full py-4 rounded-xl cyber text-black bg-gradient-to-r from-gold to-yellow-400">
-  ✨ DAILY BONUS
-</button>
-
-<section class="glass rim rounded-xl p-4">
-  <div class="cyber text-xs opacity-60">RECENT ACTIVITY</div>
-  <div id="activity" class="text-center opacity-40 mt-4">
-    No recent activity
-  </div>
-</section>
-
-<footer class="text-center text-xs opacity-30 pt-4">
-  Waifu Catcher • Galaxy Aurora
-</footer>
-
 </main>
 
+<!-- 🔊 BOOT SOUND -->
+<audio id="bootSound">
+  <source src="https://assets.mixkit.co/sfx/preview/mixkit-sci-fi-interface-zoom-890.mp3">
+</audio>
+
 <script>
-/* ================= TELEGRAM-SAFE INIT ================= */
-document.addEventListener("DOMContentLoaded", () => {
+function toggleMenu(){
+  document.getElementById("menu").classList.toggle("show");
+}
 
-  const loader = document.getElementById("loader");
-  const app = document.getElementById("app");
+document.addEventListener("DOMContentLoaded",()=>{
+  const loader=document.getElementById("loader");
+  const app=document.getElementById("app");
+  const sound=document.getElementById("bootSound");
 
-  /* 🔥 FORCE SHOW HOME AFTER 2s (NO DEPENDENCIES) */
-  setTimeout(() => {
+  setTimeout(()=>{
     loader.remove();
     app.classList.add("show");
-  }, 2000);
+    sound.volume=.4;
+    sound.play().catch(()=>{});
+  },2000);
 
-  /* Telegram (optional, never blocking) */
-  if (!window.Telegram || !Telegram.WebApp) return;
+  if(!window.Telegram||!Telegram.WebApp)return;
+  const tg=Telegram.WebApp;
+  tg.expand();tg.ready();
 
-  const tg = Telegram.WebApp;
-  tg.expand();
-  tg.ready();
-
-  setTimeout(() => {
-    const user = tg.initDataUnsafe?.user;
-    if (!user) return;
-
-    document.getElementById("name").innerText =
-      user.first_name || "Player";
-    document.getElementById("username").innerText =
-      user.username ? "@"+user.username : "No username";
-    document.getElementById("userid").innerText =
-      "ID: "+user.id;
-    if (user.photo_url)
-      document.getElementById("avatar").src = user.photo_url;
-  }, 400);
-
+  setTimeout(()=>{
+    const u=tg.initDataUnsafe?.user;
+    if(!u)return;
+    name.innerText=u.first_name||"Player";
+    username.innerText=u.username?"@"+u.username:"No username";
+    userid.innerText="ID: "+u.id;
+    if(u.photo_url)avatar.src=u.photo_url;
+  },400);
 });
 </script>
 
