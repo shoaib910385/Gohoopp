@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Waifu Catcher</title>
 
-<!-- Telegram SDK -->
+<!-- Telegram -->
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <!-- Fonts -->
@@ -19,13 +19,13 @@ tailwind.config = {
   theme: {
     extend: {
       colors: {
-        neon: "#00F2FF",
-        violet: "#BF00FF",
-        gold: "#FFD36A",
-        abyss: "#02010A"
+        neon: "#8b5cf6",
+        violet: "#a855f7",
+        deep: "#030014",
+        gold: "#facc15"
       },
       boxShadow: {
-        glow: "0 0 25px rgba(191,0,255,.5)"
+        glow: "0 0 30px rgba(168,85,247,.5)"
       }
     }
   }
@@ -38,29 +38,31 @@ body{
   margin:0;
   font-family:'Inter',sans-serif;
   background:
-    radial-gradient(circle at 20% 10%, rgba(191,0,255,.25), transparent 40%),
-    radial-gradient(circle at 80% 90%, rgba(0,242,255,.15), transparent 40%),
-    linear-gradient(180deg,#040014,#02010a);
+    radial-gradient(circle at 20% 10%, rgba(168,85,247,.35), transparent 45%),
+    radial-gradient(circle at 80% 90%, rgba(139,92,246,.25), transparent 45%),
+    linear-gradient(180deg,#05001c,#020012);
   color:white;
   overflow-x:hidden;
 }
 
-/* stars */
+/* galaxy stars */
 body::before{
   content:"";
   position:fixed;
   inset:0;
   background-image:
-    radial-gradient(1px 1px at 30% 20%,#fff,transparent),
-    radial-gradient(1px 1px at 70% 80%,#fff,transparent),
-    radial-gradient(1px 1px at 50% 50%,#fff,transparent);
-  opacity:.15;
-  animation: drift 35s linear infinite;
+    radial-gradient(1px 1px at 15% 30%, #fff, transparent),
+    radial-gradient(1px 1px at 50% 60%, #fff, transparent),
+    radial-gradient(1px 1px at 80% 20%, #fff, transparent),
+    radial-gradient(1px 1px at 70% 80%, #fff, transparent);
+  opacity:.18;
+  animation: stars 40s linear infinite;
   pointer-events:none;
 }
-@keyframes drift{
+
+@keyframes stars{
   from{transform:translateY(0)}
-  to{transform:translateY(-200px)}
+  to{transform:translateY(-300px)}
 }
 
 /* ================= GLASS ================= */
@@ -78,7 +80,7 @@ body::before{
   inset:0;
   padding:1px;
   border-radius:18px;
-  background:linear-gradient(135deg,#bf00ff,#00f2ff,#ffd36a);
+  background:linear-gradient(135deg,#a855f7,#8b5cf6,#facc15);
   -webkit-mask:
     linear-gradient(#000 0 0) content-box,
     linear-gradient(#000 0 0);
@@ -95,32 +97,49 @@ body::before{
 #loader{
   position:fixed;
   inset:0;
+  background:linear-gradient(90deg,#020012,#06002a,#020012);
   display:flex;
-  align-items:center;
+  flex-direction:column;
   justify-content:center;
-  background:linear-gradient(90deg,#02010a,#060020,#02010a);
+  align-items:center;
   z-index:9999;
 }
 
-.loader-text{
+.loader-title{
   font-family:'Orbitron',sans-serif;
   font-size:22px;
-  color:#bf00ff;
-  text-shadow:0 0 25px #bf00ff;
-  animation:pulse 1.3s infinite alternate;
+  color:#a855f7;
+  text-shadow:0 0 25px #a855f7;
+  margin-bottom:20px;
 }
 
-@keyframes pulse{
-  from{opacity:.4}
-  to{opacity:1}
+.progress-wrap{
+  width:180px;
+  height:4px;
+  background:rgba(255,255,255,.15);
+  overflow:hidden;
+  border-radius:10px;
 }
 
-/* ================= APP FADE ================= */
+.progress-bar{
+  width:0%;
+  height:100%;
+  background:linear-gradient(90deg,#a855f7,#8b5cf6);
+  animation: loadbar 2s linear forwards;
+}
+
+@keyframes loadbar{
+  from{width:0%}
+  to{width:100%}
+}
+
+/* ================= APP ================= */
 #app{
   opacity:0;
-  transform:scale(.98);
+  transform:scale(.97);
   transition:opacity .8s ease, transform .8s ease;
 }
+
 #app.show{
   opacity:1;
   transform:scale(1);
@@ -130,9 +149,12 @@ body::before{
 
 <body>
 
-<!-- SPLIT LOADER -->
+<!-- LOADER -->
 <div id="loader">
-  <div class="loader-text">WAIFU CATCHER</div>
+  <div class="loader-title">WAIFU CATCHER</div>
+  <div class="progress-wrap">
+    <div class="progress-bar"></div>
+  </div>
 </div>
 
 <!-- MAIN APP -->
@@ -142,30 +164,25 @@ body::before{
   WAIFU CATCHER ✨
 </header>
 
-<!-- PROFILE -->
 <section class="glass rim rounded-xl p-4 relative flex gap-4 items-center">
-
-  <!-- menu -->
   <div class="absolute top-3 right-4 space-y-1">
     <span class="block w-5 h-[2px] bg-violet"></span>
     <span class="block w-5 h-[2px] bg-violet"></span>
     <span class="block w-5 h-[2px] bg-violet"></span>
   </div>
 
-  <!-- avatar -->
   <div class="relative">
     <img id="avatar" class="w-16 h-16 rounded-lg object-cover shadow-glow">
     <div class="absolute inset-0 rounded-lg ring-1 ring-violet"></div>
   </div>
 
   <div>
-    <div id="name" class="cyber text-lg">Loading</div>
+    <div id="name" class="cyber text-lg">—</div>
     <div id="username" class="text-xs opacity-60">@user</div>
     <div id="userid" class="text-xs opacity-40">ID: —</div>
   </div>
 </section>
 
-<!-- STATS -->
 <section class="grid grid-cols-3 gap-3">
   <div class="glass rim rounded-lg p-3 text-center">
     <div id="coins" class="text-neon text-lg font-semibold">0</div>
@@ -197,53 +214,55 @@ body::before{
 </section>
 
 <footer class="text-center text-xs opacity-30 pt-4">
-  Waifu Catcher • Neon Nexus
+  Waifu Catcher • Galaxy Nexus
 </footer>
 
 </main>
 
 <script>
-/* ================= TELEGRAM ================= */
-const tg = window.Telegram.WebApp;
-tg.expand();
-tg.ready();
+/* ================= SAFE INIT ================= */
+document.addEventListener("DOMContentLoaded", () => {
 
-const user = tg.initDataUnsafe?.user;
-if(!user){
-  document.body.innerHTML = "Open inside Telegram";
-  throw "";
-}
-
-/* user data */
-name.innerText = user.first_name || "Player";
-username.innerText = user.username ? "@"+user.username : "No username";
-userid.innerText = "ID: " + user.id;
-if(user.photo_url) avatar.src = user.photo_url;
-
-/* demo stats */
-coins.innerText = "80";
-waifus.innerText = "0";
-rank.innerText = "#462";
-
-/* actions */
-catch.onclick = ()=>{
-  tg.HapticFeedback.impactOccurred("medium");
-  tg.sendData(JSON.stringify({action:"catch_waifu"}));
-  activity.innerText = "🎯 Catch request sent...";
-};
-
-bonus.onclick = ()=>{
-  tg.HapticFeedback.impactOccurred("light");
-  tg.sendData(JSON.stringify({action:"daily_bonus"}));
-  activity.innerText = "✨ Bonus claimed...";
-};
-
-/* ================= LOADER FIX ================= */
-setTimeout(()=>{
   const loader = document.getElementById("loader");
-  loader.remove();                 // 🔥 force remove
-  document.getElementById("app").classList.add("show");
-}, 2000); // EXACT 2 SECONDS
+  const app = document.getElementById("app");
+
+  const tg = window.Telegram.WebApp;
+  tg.expand();
+  tg.ready();
+
+  const user = tg.initDataUnsafe?.user;
+  if(!user){
+    document.body.innerHTML = "Open inside Telegram";
+    return;
+  }
+
+  name.innerText = user.first_name || "Player";
+  username.innerText = user.username ? "@"+user.username : "No username";
+  userid.innerText = "ID: " + user.id;
+  if(user.photo_url) avatar.src = user.photo_url;
+
+  coins.innerText = "80";
+  waifus.innerText = "0";
+  rank.innerText = "#462";
+
+  catch.onclick = ()=>{
+    tg.HapticFeedback.impactOccurred("medium");
+    tg.sendData(JSON.stringify({action:"catch_waifu"}));
+    activity.innerText="🎯 Catch initiated...";
+  };
+
+  bonus.onclick = ()=>{
+    tg.HapticFeedback.impactOccurred("light");
+    tg.sendData(JSON.stringify({action:"daily_bonus"}));
+    activity.innerText="✨ Bonus claimed...";
+  };
+
+  /* 🔥 GUARANTEED TRANSITION */
+  setTimeout(() => {
+    loader.remove();
+    app.classList.add("show");
+  }, 2000); // EXACT 2 SECONDS
+});
 </script>
 
 </body>
