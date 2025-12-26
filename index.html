@@ -270,10 +270,11 @@ document.addEventListener("DOMContentLoaded",()=>{
   const tg=Telegram.WebApp;
   tg.expand();tg.ready();
 
+  
   setTimeout(()=>{
     const u=tg.initDataUnsafe?.user;
     if(!u) return;
-    name.innerText=u.first_name||"Player";
+    name.innerText=u.first_name||""}${user.last_name || ""}`;
     username.innerText=u.username?"@"+u.username:"No username";
     userid.innerText="ID: "+u.id;
     if(u.photo_url) avatar.src=u.photo_url;
