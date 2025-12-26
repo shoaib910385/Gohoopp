@@ -273,13 +273,25 @@ document.addEventListener("DOMContentLoaded",()=>{
   
   setTimeout(()=>{
     const u=tg.initDataUnsafe?.user;
-    if(!u) return;
-    name.innerText=u.first_name||""}${user.last_name || ""}`;
-    username.innerText=u.username?"@"+u.username:"No username";
-    userid.innerText="ID: "+u.id;
-    if(u.photo_url) avatar.src=u.photo_url;
-  },400);
-});
+if (!user) {
+  document.body.innerHTML = "❌ Open inside Telegram only";
+  throw new Error("Not Telegram");
+}
+
+/* ================= PROFILE ================= */
+document.getElementById("name").innerText =
+  `${user.first_name || ""} ${user.last_name || ""}`;
+
+
+document.getElementById("username").innerText =
+  user.username ? `@${user.username}` : "No username";
+
+document.getElementById("userid").innerText =
+  `ID: ${user.id}`;
+
+if (user.photo_url) {
+  document.getElementById("avatar").src = user.photo_url;
+}
 </script>
 
 </body>
