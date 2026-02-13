@@ -1,285 +1,638 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Specially For You</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&family=Sacramento&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <style>
+        :root {
+            --bg-color: #fff5e4;
+            --primary-color: #d65d5d;
+            --text-color: #5d4037;
+            --accent-color: #ff8fa3;
+            --card-bg: #fff;
+        }
 
-<meta name="viewport"
-content="width=device-width,height=device-height,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
 
-<title>Waifu Catcher</title>
+        body {
+            background-color: var(--bg-color);
+            font-family: 'Nunito', sans-serif;
+            color: var(--text-color);
+            height: 100vh;
+            overflow: hidden; /* Prevent scrolling */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
 
-<!-- Telegram SDK -->
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
+        /* Container to mimic mobile screen on desktop */
+        .app-container {
+            width: 100%;
+            height: 100%;
+            max-width: 480px;
+            background: var(--bg-color);
+            position: relative;
+            overflow-y: auto; /* Allow internal scrolling if needed */
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+        }
 
-<!-- Fonts -->
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+        /* UTILITIES */
+        .screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.8s ease-in-out;
+            z-index: 1;
+        }
 
-<!-- Tailwind -->
-<script src="https://cdn.tailwindcss.com"></script>
+        .screen.active {
+            opacity: 1;
+            pointer-events: all;
+            z-index: 10;
+        }
 
-<script>
-tailwind.config = {
-  theme: {
-    extend: {
-      colors: {
-        night: "#020617",
-        deep: "#020b2d",
-        aurora: "#0ea5e9",
-        silver: "#cbd5e1",
-        gold: "#f5c77a"
-      },
-      boxShadow: {
-        glow: "0 0 28px rgba(14,165,233,.35)"
-      }
-    }
-  }
-}
-</script>
+        h1 {
+            font-family: 'Sacramento', cursive;
+            font-size: 3.5rem;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            text-align: center;
+            line-height: 1.2;
+        }
 
-<style>
-html,body{
-  width:100%;
-  height:100%;
-  overflow:hidden;
-  touch-action:manipulation;
-  font-family:'Inter',sans-serif;
-}
+        p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            text-align: center;
+            margin-bottom: 20px;
+        }
 
-/* 🌌 BACKGROUND */
-body{
-  background:
-    radial-gradient(circle at 30% 15%, rgba(14,165,233,.18), transparent 45%),
-    radial-gradient(circle at 70% 85%, rgba(56,189,248,.12), transparent 45%),
-    linear-gradient(180deg,#020617,#020b2d);
-  color:white;
-}
+        .btn {
+            background: var(--primary-color);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 50px;
+            border: none;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(214, 93, 93, 0.3);
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
 
-/* 🌠 MOVING GALAXY */
-.galaxy{
-  position:fixed;
-  inset:0;
-  pointer-events:none;
-}
-.star-layer{
-  position:absolute;
-  inset:-50%;
-  background-image:
-    radial-gradient(1px 1px at 10% 20%,#fff,transparent),
-    radial-gradient(1px 1px at 40% 60%,#fff,transparent),
-    radial-gradient(1px 1px at 70% 30%,#fff,transparent),
-    radial-gradient(1px 1px at 85% 80%,#fff,transparent);
-  opacity:.25;
-  animation: drift 80s linear infinite;
-}
-.star-layer.slow{
-  opacity:.15;
-  animation-duration:160s;
-}
-@keyframes drift{
-  from{transform:translateY(0)}
-  to{transform:translateY(-500px)}
-}
+        .btn:active {
+            transform: scale(0.95);
+        }
 
-/* ✨ GLASS + RIM */
-.glass{
-  background:rgba(255,255,255,.05);
-  backdrop-filter:blur(18px);
-}
-.rim{
-  position:relative;
-}
-.rim::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  padding:1px;
-  border-radius:18px;
-  background:linear-gradient(135deg,#f5c77a,#cbd5e1,#0ea5e9);
-  -webkit-mask:
-    linear-gradient(#000 0 0) content-box,
-    linear-gradient(#000 0 0);
-  -webkit-mask-composite:xor;
-}
+        /* --- SCREEN 1: PASSWORD --- */
+        #pass-screen input {
+            padding: 15px;
+            border-radius: 15px;
+            border: 2px solid var(--accent-color);
+            background: white;
+            font-size: 1.2rem;
+            text-align: center;
+            width: 80%;
+            margin-bottom: 20px;
+            outline: none;
+        }
 
-/* 🧠 TEXT */
-.cyber{
-  font-family:'Orbitron',sans-serif;
-  letter-spacing:.15em;
-}
+        /* --- SCREEN 2: SPLASH --- */
+        .plane-container {
+            width: 100%;
+            height: 200px;
+            position: relative;
+        }
+        
+        .plane-img {
+            width: 120px;
+            position: absolute;
+            animation: fly 4s linear infinite;
+        }
 
-/* 🔮 LOADER */
-#loader{
-  position:fixed;
-  inset:0;
-  z-index:9999;
-  display:flex;
-}
-.loader-side{width:50%;background:#020617}
-.loader-center{
-  position:absolute;inset:0;
-  display:flex;flex-direction:column;
-  align-items:center;justify-content:center;
-}
-.loader-bar{
-  width:220px;height:4px;
-  background:rgba(255,255,255,.15);
-  border-radius:20px;overflow:hidden;
-}
-.loader-bar span{
-  display:block;height:100%;width:0%;
-  background:linear-gradient(90deg,#f5c77a,#0ea5e9);
-  animation:load 2s linear forwards;
-}
-@keyframes load{to{width:100%}}
+        @keyframes fly {
+            0% { transform: translate(-150px, 20px) rotate(5deg); }
+            50% { transform: translate(150px, -20px) rotate(-5deg); }
+            100% { transform: translate(450px, 20px) rotate(5deg); }
+        }
 
-/* 📱 APP */
-#app{
-  opacity:0;transform:scale(.96);
-  transition:.8s ease;
-}
-#app.show{opacity:1;transform:scale(1)}
+        /* --- SCREEN 3: LANDING --- */
+        .landing-card {
+            background: #e6f4ea; /* Light green tint from image */
+            padding: 30px;
+            border-radius: 20px;
+            position: relative;
+            width: 90%;
+            margin-top: 20px;
+            border: 1px solid #ccebd4;
+        }
 
-/* ☰ MENU */
-#menu{
-  position:fixed;inset:0;
-  background:rgba(0,0,0,.55);
-  backdrop-filter:blur(10px);
-  transform:translateX(-100%);
-  transition:.4s ease;
-  z-index:9000;
-}
-#menu.show{transform:translateX(0)}
-.menu-panel{
-  width:85%;max-width:320px;height:100%;
-  background:linear-gradient(180deg,#020617,#020b2d);
-  padding:20px;
-}
+        .deco-img {
+            position: absolute;
+            width: 90px;
+            height: auto;
+            object-fit: contain;
+            z-index: 20;
+        }
 
-/* 🔘 TILE BUTTON */
-.tile{
-  transition:.25s ease;
-}
-.tile:active{
-  transform:translateY(-6px) scale(.98);
-}
-</style>
+        .img-top-right {
+            top: -60px;
+            right: -20px;
+            transform: rotate(10deg);
+        }
+
+        .img-bottom-left {
+            bottom: -40px;
+            left: -20px;
+            width: 80px;
+            transform: rotate(-10deg);
+        }
+
+        /* --- SCREEN 4: ENVELOPE --- */
+        .envelope-wrapper {
+            position: relative;
+            cursor: pointer;
+            margin-bottom: 30px;
+        }
+        
+        .envelope {
+            width: 280px;
+            height: 180px;
+            background: #e0c9a6;
+            position: relative;
+            border-radius: 0 0 10px 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .envelope::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 140px solid transparent;
+            border-right: 140px solid transparent;
+            border-top: 100px solid #dcbfa0; /* Flap closed */
+            transform-origin: top;
+            transition: transform 0.6s;
+            z-index: 5;
+        }
+        
+        .envelope.open::before {
+            transform: rotateX(180deg);
+            z-index: 1;
+        }
+        
+        .letter-preview {
+            position: absolute;
+            top: 10px;
+            width: 240px;
+            height: 140px;
+            background: white;
+            transition: transform 0.6s 0.6s;
+            z-index: 2;
+        }
+        
+        .envelope.open .letter-preview {
+            transform: translateY(-80px);
+        }
+
+        /* --- SCREEN 5: LETTER --- */
+        .letter-paper {
+            background: #fffdf9;
+            padding: 30px 25px;
+            width: 90%;
+            border-radius: 10px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.05);
+            border: 1px solid #f0e6d2;
+            position: relative;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+        
+        .letter-deco {
+            position: absolute;
+            top: -30px;
+            right: -20px;
+            width: 70px;
+        }
+
+        .handwriting {
+            font-family: 'Indie Flower', cursive; /* Fallback if not loaded, mostly Nunito here */
+            font-style: italic;
+            color: #4a4a4a;
+        }
+
+        /* --- SCREEN 6: MUSIC PLAYER --- */
+        .cassette {
+            background: #ffdde1;
+            width: 90%;
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 20px;
+            position: relative;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            border: 2px solid white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .cassette:nth-child(2) { background: #e0f7fa; }
+        .cassette:nth-child(3) { background: #f3e5f5; }
+
+        .tape-window {
+            background: #333;
+            width: 60%;
+            height: 40px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 10px;
+            margin: 10px 0;
+        }
+
+        .gear {
+            width: 25px;
+            height: 25px;
+            background: white;
+            border-radius: 50%;
+            border: 2px dashed #aaa;
+        }
+
+        .playing .gear {
+            animation: spin 2s linear infinite;
+        }
+
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        .play-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            margin-top: -25px; /* Half overlay */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        /* --- SCREEN 7: FLIP CARDS --- */
+        .flip-container {
+            perspective: 1000px;
+            width: 250px;
+            height: 300px;
+            margin: 20px auto;
+        }
+
+        .flip-card {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            cursor: pointer;
+        }
+
+        .flip-card.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .flip-front, .flip-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .flip-front {
+            background-color: #ffe4e1; /* Misty Rose */
+        }
+
+        .flip-back {
+            background-color: white;
+            transform: rotateY(180deg);
+            border: 2px solid #ffe4e1;
+        }
+
+        /* --- SCREEN 8: FINAL --- */
+        .final-msg {
+            background: #fff0f5;
+            padding: 30px;
+            border-radius: 20px;
+            border: 2px solid #ffb7b2;
+            margin-bottom: 20px;
+        }
+
+    </style>
 </head>
-
 <body>
 
-<!-- 🌌 GALAXY -->
-<div class="galaxy">
-  <div class="star-layer slow"></div>
-  <div class="star-layer"></div>
-</div>
+<div class="app-container">
 
-<!-- 🔮 LOADER -->
-<div id="loader">
-  <div class="loader-side"></div>
-  <div class="loader-side"></div>
-  <div class="loader-center">
-    <div class="cyber text-lg text-aurora mb-4">WAIFU CATCHER</div>
-    <div class="loader-bar"><span></span></div>
-  </div>
-</div>
-
-<!-- ☰ MENU -->
-<div id="menu">
-  <div class="menu-panel">
-    <div class="flex justify-between mb-6">
-      <div class="cyber text-sm">My Profile</div>
-      <button onclick="toggleMenu()">✕</button>
+    <div id="pass-screen" class="screen active">
+        <h1>Login</h1>
+        <p>Enter the secret password...</p>
+        <input type="password" id="password-input" placeholder="Password">
+        <button class="btn" onclick="checkPass()">Enter ❤️</button>
     </div>
-    <p class="opacity-70 text-sm">Profile<br>Inventory<br>Settings</p>
-  </div>
+
+    <div id="splash-screen" class="screen">
+        <div class="plane-container">
+            <img src="assets/plane.png" alt="Plane" class="plane-img">
+        </div>
+        <h2 style="color: var(--primary-color);">Loading something special for you...</h2>
+    </div>
+
+    <div id="landing-screen" class="screen">
+        <div class="landing-card">
+            <h4 style="color: #ffb7b2; margin-bottom: 5px;">welcome to my little thought...</h4>
+            <h1>Hey You</h1>
+            
+            <img src="assets/image2.png" class="deco-img img-top-right">
+            
+            <p>I wanted to do a tiny something because you mean a lot to me.</p>
+            <p style="font-size: 0.9rem; color: #888;">Tap below, okay? ✨</p>
+            
+            <button class="btn" onclick="nextScreen('landing-screen', 'envelope-screen')">
+                Open This 💖
+            </button>
+
+            <img src="assets/image3.png" class="deco-img img-bottom-left">
+        </div>
+    </div>
+
+    <div id="envelope-screen" class="screen">
+        <div style="margin-bottom: 30px; text-align: center;">
+            <h4 style="color: orange;">Straight from my heart</h4>
+            <h1>A Little Note 💌</h1>
+        </div>
+
+        <div class="envelope-wrapper" onclick="openEnvelope()">
+            <div class="envelope" id="envelope-graphic">
+                <div class="letter-preview"></div>
+            </div>
+        </div>
+        
+        <p>Click to open</p>
+        <button class="btn hidden" id="open-letter-btn" onclick="nextScreen('envelope-screen', 'letter-screen')">
+            Read It ✨
+        </button>
+    </div>
+
+    <div id="letter-screen" class="screen">
+        <div class="letter-paper">
+            <img src="assets/image4.png" class="letter-deco">
+            
+            <h3 style="color: var(--primary-color);">Hey My Favorite Person,</h3>
+            <br>
+            <p class="handwriting">
+                Hey Love, I may have messed up a bit. I never meant to hurt you, sometimes my brain trips over my heart.
+                <br><br>
+                What I *do* know for sure is how much you matter to me. You're incredibly special to me, and I hate the idea of being the reason you felt anything less than loved.
+                <br><br>
+                Thank you for being you. I hope this makes you smile, even just a little.
+            </p>
+            <br>
+            <p style="text-align: right; color: var(--primary-color); font-weight: bold;">Always yours 💕</p>
+        </div>
+        <br>
+        <button class="btn" onclick="nextScreen('letter-screen', 'music-screen')">Keep Going ✨</button>
+    </div>
+
+    <div id="music-screen" class="screen">
+        <h1 style="font-size: 2.5rem; margin-bottom: 20px;">Reminded Me Of You</h1>
+        
+        <div class="cassette">
+            <div style="width: 100%; display:flex; justify-content:space-between; font-size: 0.8rem; color: #888;">
+                <span>SIDE A</span> <span>03:45</span>
+            </div>
+            <h3 style="margin: 5px 0;">Song Title One</h3>
+            <p style="font-size: 0.8rem; color: #aaa;">Basically... my heart.</p>
+            <div class="tape-window">
+                <div class="gear"></div>
+                <div style="background: #111; height: 100%; width: 40px;"></div>
+                <div class="gear"></div>
+            </div>
+            <button class="play-btn" onclick="playMusic(1, this)">▶</button>
+        </div>
+
+        <div class="cassette">
+            <div style="width: 100%; display:flex; justify-content:space-between; font-size: 0.8rem; color: #888;">
+                <span>SIDE A</span> <span>02:20</span>
+            </div>
+            <h3 style="margin: 5px 0;">Song Title Two</h3>
+            <p style="font-size: 0.8rem; color: #aaa;">I'd still choose you.</p>
+            <div class="tape-window">
+                <div class="gear"></div>
+                <div style="background: #111; height: 100%; width: 40px;"></div>
+                <div class="gear"></div>
+            </div>
+            <button class="play-btn" onclick="playMusic(2, this)">▶</button>
+        </div>
+
+        <button class="btn" style="margin-top: 20px;" onclick="stopAllMusic(); nextScreen('music-screen', 'flip-screen')">Next ✨</button>
+    </div>
+
+    <div id="flip-screen" class="screen">
+        <h4 style="color: var(--accent-color);">just saying...</h4>
+        <h1 style="font-size: 2rem;">Little Things</h1>
+        <p>Tap to flip 👇</p>
+
+        <div class="flip-container" onclick="this.querySelector('.flip-card').classList.toggle('flipped')">
+            <div class="flip-card">
+                <div class="flip-front">
+                    <h2>I may have been a little dumb sometimes 🥲</h2>
+                </div>
+                <div class="flip-back">
+                    <h3>But...</h3>
+                    <p>My intentions are always to make you happy. I'm working on it!</p>
+                    <p style="color: var(--primary-color);">You get adorably mad btw.</p>
+                </div>
+            </div>
+        </div>
+
+        <button class="btn" onclick="nextScreen('flip-screen', 'final-screen')">One Last Thing ➡️</button>
+    </div>
+
+    <div id="final-screen" class="screen">
+        <h4 style="color: orange;">the grand finale...</h4>
+        <h1>Will You Forgive Me?</h1>
+        
+        <div class="final-msg">
+            <p>I hope this reminded you how important you are to me.</p>
+            <p><strong>You Matter To Me.</strong></p>
+            <div style="font-size: 1.5rem;">❤️❤️❤️❤️❤️</div>
+        </div>
+
+        <button class="btn" id="seal-btn" onclick="celebrate()">Seal It 💌</button>
+        <br><br>
+        <button style="background: none; border: none; text-decoration: underline; color: #888; cursor: pointer;" onclick="location.reload()">Restart</button>
+    </div>
+
 </div>
-
-<!-- 📱 APP -->
-<main id="app" class="relative max-w-[420px] mx-auto p-4 space-y-5 overflow-y-auto">
-
-<!-- ☰ MENU BTN -->
-<button onclick="toggleMenu()" class="absolute top-4 left-4 space-y-1 z-10">
-  <span class="block w-5 h-[2px] bg-silver"></span>
-  <span class="block w-5 h-[2px] bg-silver"></span>
-  <span class="block w-5 h-[2px] bg-silver"></span>
-</button>
-
-<header class="text-center cyber text-sm opacity-80 mt-2">
-  WAIFU CATCHER ✨
-</header>
-
-<!-- 👤 PROFILE (TALL) -->
-<section class="glass rim rounded-xl p-5 flex gap-4 items-center min-h-[110px]">
-  <div class="relative">
-    <img id="avatar" class="w-20 h-20 rounded-lg object-cover shadow-glow">
-    <div class="absolute inset-0 rounded-lg ring-1 ring-gold"></div>
-  </div>
-  <div>
-    <div id="name" class="cyber text-lg">Player</div>
-    <div id="username" class="text-sm opacity-60">@user</div>
-    <div id="userid" class="text-xs opacity-40">ID: —</div>
-  </div>
-</section>
-
-<!-- 🔘 SCROLLABLE ACTIONS -->
-<section class="space-y-4 pb-8">
-  <div class="glass rim rounded-xl p-4 tile" onclick="tap('myverse')">
-    <div class="cyber text-lg">MYVERSE ▾</div>
-    <div class="opacity-60 text-sm">Manage your collection</div>
-  </div>
-
-  <div class="glass rim rounded-xl p-4 tile" onclick="tap('fusion')">
-    <div class="cyber text-lg text-aurora">FUSION LAB ⚡</div>
-    <div class="opacity-60 text-sm">Fuse waifus for upgrades</div>
-  </div>
-
-  <div class="glass rim rounded-xl p-4 tile" onclick="tap('gacha')">
-    <div class="cyber text-lg text-gold">GACHA ✦</div>
-    <div class="opacity-60 text-sm">Summon rare waifus</div>
-  </div>
-</section>
-
-</main>
-
-<!-- 🔊 SOUND -->
-<audio id="bootSound" src="https://assets.mixkit.co/sfx/preview/mixkit-sci-fi-interface-zoom-890.mp3"></audio>
-<audio id="tapSound" src="https://assets.mixkit.co/sfx/preview/mixkit-interface-click-1126.mp3"></audio>
 
 <script>
-function toggleMenu(){
-  document.getElementById("menu").classList.toggle("show");
-}
+    // --- CONFIGURATION: PASTE YOUR LINKS HERE ---
+    const SONGS = {
+        1: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3", // Replace with your Link
+        2: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3", // Replace with your Link
+        3: "" // Add more if needed
+    };
 
-function tap(action){
-  document.getElementById("tapSound").play().catch(()=>{});
-  if(window.Telegram?.WebApp){
-    Telegram.WebApp.HapticFeedback.impactOccurred("medium");
-    Telegram.WebApp.sendData(JSON.stringify({action}));
-  }
-}
+    // --- LOGIC ---
+    let currentAudio = null;
 
-document.addEventListener("DOMContentLoaded",()=>{
-  setTimeout(()=>{
-    loader.remove();
-    app.classList.add("show");
-    bootSound.volume=.4;
-    bootSound.play().catch(()=>{});
-  },2000);
+    function checkPass() {
+        const pass = document.getElementById('password-input').value;
+        if (pass === "UMMM") {
+            nextScreen('pass-screen', 'splash-screen');
+            // Fake loading time
+            setTimeout(() => {
+                nextScreen('splash-screen', 'landing-screen');
+            }, 3000);
+        } else {
+            alert("Wrong password! Try UMMM");
+        }
+    }
 
-  if(!window.Telegram?.WebApp) return;
-  const tg=Telegram.WebApp;
-  tg.expand();tg.ready();
+    function nextScreen(hideId, showId) {
+        const hideEl = document.getElementById(hideId);
+        const showEl = document.getElementById(showId);
 
-  setTimeout(()=>{
-    const u=tg.initDataUnsafe?.user;
-    if(!u) return;
-    name.innerText=u.first_name||"Player";
-    username.innerText=u.username?"@"+u.username:"No username";
-    userid.innerText="ID: "+u.id;
-    if(u.photo_url) avatar.src=u.photo_url;
-  },400);
-});
+        hideEl.style.opacity = 0;
+        setTimeout(() => {
+            hideEl.classList.remove('active');
+            showEl.classList.add('active');
+            // Small delay to allow display:block to apply before opacity
+            setTimeout(() => {
+                showEl.style.opacity = 1;
+            }, 50);
+        }, 800);
+    }
+
+    function openEnvelope() {
+        const env = document.getElementById('envelope-graphic');
+        const btn = document.getElementById('open-letter-btn');
+        
+        if (!env.classList.contains('open')) {
+            env.classList.add('open');
+            setTimeout(() => {
+                btn.classList.remove('hidden');
+            }, 500);
+        }
+    }
+
+    function playMusic(id, btn) {
+        // Stop current music
+        if (currentAudio) {
+            currentAudio.pause();
+            currentAudio.currentTime = 0;
+            // Reset all UI
+            document.querySelectorAll('.cassette').forEach(el => el.classList.remove('playing'));
+            document.querySelectorAll('.play-btn').forEach(b => b.textContent = '▶');
+        }
+
+        // If clicking the same button to pause
+        if (btn.textContent === '⏸') {
+            return; 
+        }
+
+        // Play new
+        const src = SONGS[id];
+        if (src) {
+            currentAudio = new Audio(src);
+            currentAudio.play();
+            
+            // UI Update
+            const cassette = btn.closest('.cassette');
+            cassette.classList.add('playing');
+            btn.textContent = '⏸';
+
+            // Auto reset when done
+            currentAudio.onended = () => {
+                cassette.classList.remove('playing');
+                btn.textContent = '▶';
+            };
+        }
+    }
+
+    function stopAllMusic() {
+        if (currentAudio) {
+            currentAudio.pause();
+            currentAudio = null;
+        }
+    }
+
+    function celebrate() {
+        const btn = document.getElementById('seal-btn');
+        btn.textContent = "Sent with Love! ❤️";
+        btn.style.background = "#4CAF50"; // Green for success
+
+        // Confetti effect
+        var duration = 3 * 1000;
+        var animationEnd = Date.now() + duration;
+        var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+        var random = function(min, max) {
+        return Math.random() * (max - min) + min;
+        }
+
+        var interval = setInterval(function() {
+        var timeLeft = animationEnd - Date.now();
+
+        if (timeLeft <= 0) {
+            return clearInterval(interval);
+        }
+
+        var particleCount = 50 * (timeLeft / duration);
+        confetti(Object.assign({}, defaults, { particleCount, origin: { x: random(0.1, 0.3), y: Math.random() - 0.2 } }));
+        confetti(Object.assign({}, defaults, { particleCount, origin: { x: random(0.7, 0.9), y: Math.random() - 0.2 } }));
+        }, 250);
+    }
+
 </script>
-
 </body>
 </html>
