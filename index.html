@@ -386,39 +386,65 @@
         
         
 
-        <div id="s-final" class="absolute inset-0 z-30 hidden flex-col items-center justify-center p-6 opacity-0 transition-opacity duration-700">
-            <h4 class="font-script text-3xl text-pastelRed mb-2">the grand finale...</h4>
-            <h1 class="font-bold text-3xl text-brown mb-6 text-center">One Last Request</h1>
-            
-            <div class="bg-white p-6 rounded-2xl shadow-xl border border-red-100 w-full mb-8 text-center relative overflow-hidden">
-                <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-red-200 via-red-400 to-red-200"></div>
-                <p class="text-lg text-gray-700 mb-4 font-medium">I hope this reminded you how important you are to me.</p>
-                <p class="font-bold text-2xl text-deepRed mb-4">You Matter To Me.</p>
-                <div class="flex justify-center gap-3 text-2xl animate-pulse">❤️ ❤️ ❤️</div>
+        <div id="s-final" class="absolute inset-0 z-30 hidden flex-col items-center pt-10 pb-4 px-6 opacity-0 transition-opacity duration-700 bg-cream">
+    <h4 class="font-script text-2xl text-pastelRed">the grand finale...</h4>
+    <h1 class="font-bold text-3xl text-deepRed mb-6">One Last Thing</h1>
+    
+    <div class="bg-[#ffebf0] p-6 rounded-3xl shadow-xl border-2 border-white w-full max-w-sm relative overflow-hidden flex flex-col min-h-[400px]">
+        <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 bg-deepRed rounded-full flex items-center justify-center text-white shadow-md">
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+            </div>
+            <h2 class="font-bold text-xl text-deepRed">Final Love Letter</h2>
+        </div>
+
+        <div id="typewriter-text" class="font-handwriting text-lg text-gray-800 leading-relaxed flex-grow">
             </div>
 
-            <button id="seal-btn" onclick="startSealing()" class="bg-green-500 text-white w-full py-4 rounded-full font-bold text-xl shadow-green-200 shadow-xl transition-all active:scale-95 flex items-center justify-center gap-2">
-                Seal It with Love 💌
+        <p class="font-script text-xl text-deepRed text-right mt-4">This is me, choosing you.</p>
+    </div>
+
+    <div id="final-choice" class="w-full mt-8 flex flex-col gap-4 items-center">
+        <p class="font-bold text-brown text-lg">Do you love me? 🥺</p>
+        <div class="flex gap-4 w-full">
+            <button id="yes-btn" onclick="startSealing()" class="flex-1 bg-deepRed text-white py-4 rounded-full font-bold text-xl shadow-lg active:scale-95 transition-all">
+                Yes! ❤️
+            </button>
+            <button id="no-btn" onmouseover="moveNoButton()" onclick="handleNoClick()" class="flex-1 bg-gray-400 text-white py-4 rounded-full font-bold text-xl shadow-lg transition-all">
+                No
             </button>
         </div>
+    </div>
+</div>
 
-        <div id="sealing-overlay" class="absolute inset-0 z-[100] hidden flex-col items-center justify-center bg-black/60 backdrop-blur-md transition-opacity duration-500">
-            <div id="sealing-anim" class="flex flex-col items-center">
-                <div class="loader-ring text-white mb-4"></div>
-                <p class="text-white font-bold text-xl tracking-widest animate-pulse">SEALING IT...</p>
-            </div>
-            
-            <div id="sealed-success" class="hidden flex-col items-center transform scale-0 transition-transform duration-500">
-                <div class="w-32 h-32 bg-white rounded-full flex items-center justify-center shadow-2xl mb-4 border-4 border-gold">
-                    <span class="text-6xl">💌</span>
-                </div>
-                <h2 class="text-white text-3xl font-script font-bold">Sent!</h2>
-                <p class="text-white/80 mt-2">Lots of love from yours Stalkrr💕</p>
-                <button onclick="location.reload()" class="mt-8 text-white text-sm underline opacity-70 hover:opacity-100">Replay?</button>
+<div id="sealing-overlay" class="absolute inset-0 z-[100] hidden flex-col items-center justify-center bg-black/70 backdrop-blur-lg">
+    <div id="sealing-anim" class="flex flex-col items-center">
+        <div class="w-16 h-16 border-4 border-white border-t-deepRed rounded-full animate-spin mb-4"></div>
+        <p class="text-white font-bold text-xl tracking-widest animate-pulse">WRAPPING IT UP GENTLY...</p>
+    </div>
+    
+    <div id="sealed-success" class="hidden flex-col items-center bg-white p-8 rounded-[40px] shadow-2xl transform scale-0 transition-transform duration-500 max-w-[85%] text-center">
+        <div class="relative mb-6">
+            <img src="https://apology-2-demo.netlify.app/assets/pic1-BGQ1PBQT.jpg" class="w-32 h-32 object-cover rounded-full border-4 border-pastelRed shadow-xl" alt="Love">
+            <div class="absolute -bottom-2 -right-2 bg-white rounded-full p-2 shadow-md">
+                <span class="text-2xl">💝</span>
             </div>
         </div>
-
+        
+        <h2 class="text-3xl font-script font-bold text-deepRed mb-2">Sent With Love</h2>
+        <p class="text-gray-600 font-medium mb-1">You Matter To Me</p>
+        <div class="flex justify-center gap-1 mb-4">
+            <span class="text-red-500">❤️</span><span class="text-red-500">❤️</span><span class="text-red-500">❤️</span><span class="text-red-500">❤️</span><span class="text-red-500">❤️</span>
+        </div>
+        
+        <p class="text-brown font-bold text-lg mb-6">Always.</p>
+        
+        <button onclick="location.reload()" class="bg-pastelRed text-white px-8 py-3 rounded-full font-bold shadow-md hover:brightness-110 active:scale-95 transition-all">
+            See Again ✨
+        </button>
     </div>
+</div>
+        
 
     <script>
         // ================= CONFIGURATION =================
@@ -435,22 +461,23 @@
         let currentCassetteDiv = null;
 
         // ================= NAVIGATION =================
+
+        // --- Updated Navigation ---
         function nextScreen(hideId, showId) {
             const hideEl = document.getElementById(hideId);
             const showEl = document.getElementById(showId);
-            
             hideEl.style.opacity = '0';
             setTimeout(() => {
                 hideEl.classList.add('hidden');
                 hideEl.classList.remove('flex');
-                
                 showEl.classList.remove('hidden');
                 showEl.classList.add('flex');
-                // Trigger reflow
                 void showEl.offsetWidth; 
                 showEl.style.opacity = '1';
+                if(showId === 's-final') setTimeout(startFinalLetter, 500);
             }, 500);
         }
+        
 
         // ================= PASSWORD LOGIC =================
         function checkPass() {
@@ -532,30 +559,59 @@
             divElement.querySelector('.play-icon').innerHTML = '<svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>';
         }
 
-        // ================= SEALING LOGIC (NEW) =================
+                // --- Typewriter Effect ---
+        function startFinalLetter() {
+            const letter = "I know I can be a bit much sometimes, but I promise my intentions are always to make you smile.\n\nYou're the most special person in my world, and I'm so lucky to have you.\n\nThank you for everything.";
+            let i = 0;
+            const element = document.getElementById("typewriter-text");
+            element.innerHTML = "";
+            function type() {
+                if (i < letter.length) {
+                    element.innerHTML += letter.charAt(i);
+                    i++;
+                    setTimeout(type, 50);
+                }
+            }
+            type();
+        }
+
+        // --- Funny No Button ---
+        let noClickCount = 0;
+        const noTexts = ["Really, no? 😢", "Think again? 🤨", "Are you mad? 🥺", "Think again, it's me! 🙋‍♂️", "Wait, you mean Yes? 😉"];
+        
+        function handleNoClick() {
+            const noBtn = document.getElementById('no-btn');
+            const yesBtn = document.getElementById('yes-btn');
+            if (noClickCount < noTexts.length) {
+                noBtn.innerText = noTexts[noClickCount];
+                yesBtn.style.transform = `scale(${1 + (noClickCount * 0.15)})`;
+                noClickCount++;
+            } else {
+                noBtn.innerText = "Yes! ❤️";
+                noBtn.classList.replace('bg-gray-400', 'bg-deepRed');
+                noBtn.onclick = startSealing;
+            }
+        }
+
+        
+        // --- Updated Sealing ---
         function startSealing() {
             const overlay = document.getElementById('sealing-overlay');
             const anim = document.getElementById('sealing-anim');
             const success = document.getElementById('sealed-success');
-            
-            // Show Overlay
             overlay.classList.remove('hidden');
             overlay.classList.add('flex');
-            
-            // 1. Wait for "Sealing..." animation (2.5 seconds)
             setTimeout(() => {
                 anim.classList.add('hidden');
                 success.classList.remove('hidden');
-                
-                // Pop effect
+                success.classList.add('flex');
                 setTimeout(() => {
-                    success.classList.remove('scale-0');
                     success.classList.add('scale-100');
                     fireConfetti();
-                }, 100);
-                
+                }, 50);
             }, 2500);
         }
+        
 
         function fireConfetti() {
             const duration = 3000;
