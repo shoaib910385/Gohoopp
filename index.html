@@ -223,63 +223,103 @@
                 Keep Going ✨
             </button>
         </div>
-
         <div id="s-music" class="absolute inset-0 z-30 hidden flex-col items-center pt-10 pb-4 px-6 opacity-0 transition-opacity duration-700 bg-cream">
-            <div class="text-center mb-6">
-                <p class="font-script text-2xl text-pastelRed">Hope they feel nice</p>
-                <h1 class="font-bold text-3xl text-deepRed leading-tight">Some Songs That<br>Reminded Me of You</h1>
+    <div class="text-center mb-6">
+        <p class="font-script text-2xl text-pastelRed">Hope they feel nice</p>
+        <h1 class="font-bold text-3xl text-deepRed leading-tight">Some Songs That<br>Reminded Me of You</h1>
+    </div>
+
+    <div class="w-full overflow-y-auto custom-scroll px-2 pb-24 space-y-6">
+        
+        <div class="cassette-shell cassette-tilted relative w-full h-40 bg-pink-100 rounded-xl border-4 border-white shadow-md p-3 flex flex-col justify-between cursor-pointer group" onclick="playTrack(1, this)">
+            <div class="h-4 bg-pink-200 rounded opacity-50 w-full mb-2"></div>
+            <div class="absolute top-3 right-3 text-xs text-pink-400 font-bold tracking-widest">SIDE A</div>
+            
+            <div class="flex flex-col items-center justify-center z-10">
+                <h3 class="font-bold text-gray-800 text-lg">Perfect</h3>
+                <p class="text-[10px] text-pink-500 font-medium uppercase tracking-wide">I'd still choose you 🤍</p>
             </div>
 
-            <div class="w-full overflow-y-auto custom-scroll px-2 pb-20 space-y-6">
-                
-                <div class="cassette-shell cassette-tilted relative w-full h-40 bg-pink-100 rounded-xl border-4 border-white shadow-md p-3 flex flex-col justify-between cursor-pointer" onclick="playTrack(1, this)">
-                    <div class="h-4 bg-pink-200 rounded opacity-50 w-full mb-2"></div>
-                    <div class="absolute top-3 right-3 text-xs text-pink-400 font-bold">SIDE A</div>
-                    
-                    <div class="flex flex-col items-center justify-center z-10">
-                        <h3 class="font-bold text-gray-800">Perfect</h3>
-                        <p class="text-[10px] text-pink-500">I'd still choose you 🤍</p>
-                    </div>
-
-                    <div class="bg-white/80 h-14 rounded-md mx-4 mt-1 border border-gray-200 flex items-center justify-center gap-6">
-                        <div class="gear w-8 h-8 rounded-full border-2 border-dashed border-gray-400 bg-gray-100"></div>
-                        <div class="w-12 h-8 bg-gray-800 rounded"></div>
-                        <div class="gear w-8 h-8 rounded-full border-2 border-dashed border-gray-400 bg-gray-100"></div>
-                    </div>
-
-                    <div class="play-icon absolute bottom-2 left-1/2 transform -translate-x-1/2 w-8 h-8 bg-deepRed rounded-full flex items-center justify-center text-white shadow-sm transition-transform">
-                        <svg class="w-4 h-4 ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                    </div>
-                </div>
-
-                <div class="cassette-shell cassette-tilted relative w-full h-40 bg-green-100 rounded-xl border-4 border-white shadow-md p-3 flex flex-col justify-between cursor-pointer" onclick="playTrack(2, this)">
-                    <div class="h-4 bg-green-200 rounded opacity-50 w-full mb-2"></div>
-                    <div class="absolute top-3 right-3 text-xs text-green-500 font-bold">SIDE B</div>
-                    
-                    <div class="flex flex-col items-center justify-center z-10">
-                        <h3 class="font-bold text-gray-800">Boyfriend</h3>
-                        <p class="text-[10px] text-green-600">I'm so lucky to have to🤍</p>
-                    </div>
-
-                    <div class="bg-white/80 h-14 rounded-md mx-4 mt-1 border border-gray-200 flex items-center justify-center gap-6">
-                        <div class="gear w-8 h-8 rounded-full border-2 border-dashed border-gray-400 bg-gray-100"></div>
-                        <div class="w-12 h-8 bg-gray-800 rounded"></div>
-                        <div class="gear w-8 h-8 rounded-full border-2 border-dashed border-gray-400 bg-gray-100"></div>
-                    </div>
-
-                    <div class="play-icon absolute bottom-2 left-1/2 transform -translate-x-1/2 w-8 h-8 bg-deepRed rounded-full flex items-center justify-center text-white shadow-sm transition-transform">
-                        <svg class="w-4 h-4 ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                    </div>
-                </div>
-
+            <div class="bg-white/80 h-14 rounded-md mx-4 mt-1 border border-gray-200 flex items-center justify-center gap-6">
+                <div class="gear w-8 h-8 rounded-full border-2 border-dashed border-gray-400 bg-gray-100"></div>
+                <div class="w-12 h-8 bg-gray-800 rounded"></div>
+                <div class="gear w-8 h-8 rounded-full border-2 border-dashed border-gray-400 bg-gray-100"></div>
             </div>
 
-            <div class="absolute bottom-6 left-0 w-full flex justify-center z-20">
-                <button onclick="nextScreen('s-music', 's-flip')" class="bg-brown text-white px-10 py-3 rounded-full shadow-lg font-bold hover:bg-gray-800 transition-colors">
-                    Next ➡️
-                </button>
+            <div class="play-icon absolute bottom-2 left-1/2 transform -translate-x-1/2 w-8 h-8 bg-deepRed rounded-full flex items-center justify-center text-white shadow-sm transition-transform group-hover:scale-110">
+                <svg class="w-4 h-4 ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
             </div>
         </div>
+
+        <div class="cassette-shell cassette-tilted relative w-full h-40 bg-green-100 rounded-xl border-4 border-white shadow-md p-3 flex flex-col justify-between cursor-pointer group" onclick="playTrack(2, this)">
+            <div class="h-4 bg-green-200 rounded opacity-50 w-full mb-2"></div>
+            <div class="absolute top-3 right-3 text-xs text-green-500 font-bold tracking-widest">SIDE B</div>
+            
+            <div class="flex flex-col items-center justify-center z-10">
+                <h3 class="font-bold text-gray-800 text-lg">Boyfriend</h3>
+                <p class="text-[10px] text-green-600 font-medium uppercase tracking-wide">I'm so lucky to have you 🤍</p>
+            </div>
+
+            <div class="bg-white/80 h-14 rounded-md mx-4 mt-1 border border-gray-200 flex items-center justify-center gap-6">
+                <div class="gear w-8 h-8 rounded-full border-2 border-dashed border-gray-400 bg-gray-100"></div>
+                <div class="w-12 h-8 bg-gray-800 rounded"></div>
+                <div class="gear w-8 h-8 rounded-full border-2 border-dashed border-gray-400 bg-gray-100"></div>
+            </div>
+
+            <div class="play-icon absolute bottom-2 left-1/2 transform -translate-x-1/2 w-8 h-8 bg-deepRed rounded-full flex items-center justify-center text-white shadow-sm transition-transform group-hover:scale-110">
+                <svg class="w-4 h-4 ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+        </div>
+
+        <div class="cassette-shell cassette-tilted relative w-full h-40 bg-blue-100 rounded-xl border-4 border-white shadow-md p-3 flex flex-col justify-between cursor-pointer group" onclick="playTrack(3, this)">
+            <div class="h-4 bg-blue-200 rounded opacity-50 w-full mb-2"></div>
+            <div class="absolute top-3 right-3 text-xs text-blue-400 font-bold tracking-widest">SIDE A</div>
+            
+            <div class="flex flex-col items-center justify-center z-10">
+                <h3 class="font-bold text-gray-800 text-lg">My Forever</h3>
+                <p class="text-[10px] text-blue-500 font-medium uppercase tracking-wide">Just fits right ✨</p>
+            </div>
+
+            <div class="bg-white/80 h-14 rounded-md mx-4 mt-1 border border-gray-200 flex items-center justify-center gap-6">
+                <div class="gear w-8 h-8 rounded-full border-2 border-dashed border-gray-400 bg-gray-100"></div>
+                <div class="w-12 h-8 bg-gray-800 rounded"></div>
+                <div class="gear w-8 h-8 rounded-full border-2 border-dashed border-gray-400 bg-gray-100"></div>
+            </div>
+
+            <div class="play-icon absolute bottom-2 left-1/2 transform -translate-x-1/2 w-8 h-8 bg-deepRed rounded-full flex items-center justify-center text-white shadow-sm transition-transform group-hover:scale-110">
+                <svg class="w-4 h-4 ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+        </div>
+
+        <div class="cassette-shell cassette-tilted relative w-full h-40 bg-purple-100 rounded-xl border-4 border-white shadow-md p-3 flex flex-col justify-between cursor-pointer group" onclick="playTrack(4, this)">
+            <div class="h-4 bg-purple-200 rounded opacity-50 w-full mb-2"></div>
+            <div class="absolute top-3 right-3 text-xs text-purple-400 font-bold tracking-widest">SIDE B</div>
+            
+            <div class="flex flex-col items-center justify-center z-10">
+                <h3 class="font-bold text-gray-800 text-lg">Us</h3>
+                <p class="text-[10px] text-purple-500 font-medium uppercase tracking-wide">Better together 💜</p>
+            </div>
+
+            <div class="bg-white/80 h-14 rounded-md mx-4 mt-1 border border-gray-200 flex items-center justify-center gap-6">
+                <div class="gear w-8 h-8 rounded-full border-2 border-dashed border-gray-400 bg-gray-100"></div>
+                <div class="w-12 h-8 bg-gray-800 rounded"></div>
+                <div class="gear w-8 h-8 rounded-full border-2 border-dashed border-gray-400 bg-gray-100"></div>
+            </div>
+
+            <div class="play-icon absolute bottom-2 left-1/2 transform -translate-x-1/2 w-8 h-8 bg-deepRed rounded-full flex items-center justify-center text-white shadow-sm transition-transform group-hover:scale-110">
+                <svg class="w-4 h-4 ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="absolute bottom-6 left-0 w-full flex justify-center z-20 pointer-events-none">
+        <button onclick="nextScreen('s-music', 's-flip')" class="pointer-events-auto bg-brown text-white px-10 py-3 rounded-full shadow-lg font-bold hover:bg-gray-800 transition-colors active:scale-95">
+            Next ➡️
+        </button>
+    </div>
+        </div>
+        
 
         <div id="s-flip" class="absolute inset-0 z-30 hidden flex-col items-center justify-center p-6 opacity-0 transition-opacity duration-700">
             <p class="font-script text-2xl text-pastelRed mb-2">just saying...</p>
