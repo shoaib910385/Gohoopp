@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Specially For You</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Sacramento&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cream: '#FFF5E4',
+                        pastelRed: '#FF8FA3',
+                        deepRed: '#D65D5D',
+                        brown: '#5D4037',
+                        paper: '#FFFDF9',
+                        gold: '#E6C200'
+                    },
+                    fontFamily: {
+                        sans: ['Nunito', 'sans-serif'],
+                        script: ['Sacramento', 'cursive'],
+                    },
+                    animation: {
+                        'float': 'float 3s ease-in-out infinite',
+                        'wiggle': 'wiggle 2s ease-in-out infinite',
+                        'spin-slow': 'spin 4s linear infinite',
+                        'pulse-soft': 'pulse 3s infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                        wiggle: {
+                            '0%, 100%': { transform: 'rotate(-3deg)' },
+                            '50%': { transform: 'rotate(3deg)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Modern Reset & Utilities */
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { overflow: hidden; background-color: #FFF5E4; }
+        
+        /* Custom Scrollbar */
+        .custom-scroll::-webkit-scrollbar { width: 4px; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #FF8FA3; border-radius: 10px; }
+
+        /* Cassette Styles */
+        .cassette-shell {
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transform-origin: center center;
+        }
+        .cassette-tilted { transform: rotate(-6deg) scale(0.95); opacity: 0.9; }
+        .cassette-playing { transform: rotate(0deg) scale(1.02); opacity: 1; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); z-index: 10; }
+        
+        /* Envelope Animation 3D */
+        .perspective-1000 { perspective: 1000px; }
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 1rem;
+        }
+        .flip-card-back { transform: rotateY(180deg); }
+        .flipped .flip-card-inner { transform: rotateY(180deg); }
+
+        /* Loader */
+        .loader-ring {
+            display: inline-block;
+            width: 64px;
+            height: 64px;
+        }
+        .loader-ring:after {
+            content: " ";
+            display: block;
+            width: 46px;
+            height: 46px;
+            margin: 8px;
+            border-radius: 50%;
+            border: 5px solid #fff;
+            border-color: #fff transparent #fff transparent;
+            animation: loader-ring 1.2s linear infinite;
+        }
+        @keyframes loader-ring {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-cream text-brown h-[100dvh] w-screen flex justify-center items-center font-sans antialiased">
+
+    <audio id="bg-music" preload="auto"></audio>
+
+    <div class="relative w-full h-full max-w-[430px] bg-cream md:shadow-2xl md:rounded-3xl overflow-hidden flex flex-col">
+
+        <div id="s-pass" class="absolute inset-0 z-50 flex flex-col items-center justify-center bg-cream px-8 transition-opacity duration-500">
+            <div class="mb-8 p-4 bg-white rounded-full shadow-lg animate-float">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-pastelRed" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                </svg>
+            </div>
+            <h1 class="font-script text-5xl text-deepRed mb-2">Specially For You</h1>
+            <p class="text-sm text-gray-500 mb-8 uppercase tracking-widest">Secret Access Required</p>
+            
+            <input type="password" id="pass-input" placeholder="Secret Word?" 
+                class="w-full text-center p-4 rounded-xl border-2 border-red-100 focus:border-pastelRed focus:outline-none bg-white text-lg shadow-sm mb-4 transition-all"
+                onkeyup="if(event.key === 'Enter') checkPass()">
+            
+            <button onclick="checkPass()" class="w-full bg-deepRed text-white py-4 rounded-xl font-bold shadow-lg active:scale-95 transition-transform">
+                Unlock Heart ❤️
+            </button>
+            <p id="error-msg" class="mt-4 text-red-500 text-sm font-bold opacity-0 transition-opacity">Try "UMMM" 😉</p>
+        </div>
+
+        <div id="s-load" class="absolute inset-0 z-40 hidden flex-col items-center justify-center bg-cream transition-opacity duration-700">
+            <div class="relative w-64 h-32 mb-4">
+                <img src="https://media.tenor.com/On7kvXhzml4AAAAj/loading-waiting.gif" class="w-24 absolute left-0 animate-[fly_4s_linear_infinite]" style="top: 50%; transform: translateY(-50%);" alt="Loading">
+            </div>
+            <p class="font-script text-3xl text-pastelRed animate-pulse">Loading Love...</p>
+        </div>
+
+        <div id="s-land" class="absolute inset-0 z-30 hidden flex-col items-center justify-center p-6 opacity-0 transition-opacity duration-1000">
+            <div class="relative w-full bg-white/60 backdrop-blur-sm border-2 border-white p-8 rounded-[30px] shadow-xl text-center">
+                
+                <div class="absolute -top-10 -right-4 w-24 h-24 z-10 animate-float">
+                    <img src="1000300220.jpg" class="w-full h-full object-cover rounded-full border-4 border-white shadow-md transform rotate-12" alt="Pineapple Cat"> 
+                </div>
+
+                <p class="font-script text-3xl text-pastelRed mb-1">welcome to my little thought...</p>
+                <h1 class="font-bold text-5xl text-deepRed mb-6">Hey You</h1>
+                
+                <div class="bg-green-50/80 p-6 rounded-2xl mb-8 border border-green-100">
+                    <p class="text-base text-gray-700 leading-relaxed font-medium">
+                        I wanted to do a tiny something because you mean a lot to me.
+                    </p>
+                </div>
+
+                <div class="absolute -bottom-6 -left-2 w-20 h-20 z-10 animate-[wiggle_3s_infinite]">
+                    <img src="https://media.tenor.com/bK1q4yM0Q8IAAAAj/cat-pointing.gif" class="w-full h-full object-cover rounded-full border-4 border-white shadow-md" alt="Pointing Cat">
+                </div>
+
+                <button onclick="nextScreen('s-land', 's-envelope')" 
+                    class="bg-deepRed text-white w-full py-4 rounded-full font-bold text-lg shadow-red-200 shadow-xl active:scale-95 transition-transform flex items-center justify-center gap-2">
+                    Open This 💖
+                </button>
+            </div>
+        </div>
+
+        <div id="s-envelope" class="absolute inset-0 z-30 hidden flex-col items-center justify-center p-6 opacity-0 transition-opacity duration-700">
+            <h1 class="font-script text-5xl text-deepRed mb-12">Straight from my heart</h1>
+            
+            <div class="relative w-full max-w-[300px] h-[200px] cursor-pointer group perspective-1000" onclick="triggerLetterAnimation()">
+                <div class="absolute bottom-0 w-full h-[120px] bg-red-300 rounded-b-lg z-20 shadow-xl flex items-center justify-center overflow-hidden">
+                    <span class="text-white/50 text-xs tracking-widest uppercase font-bold mt-8">Tap to Open</span>
+                </div>
+                
+                <div id="letter-card" class="absolute bottom-2 left-4 right-4 h-[100px] bg-white rounded-lg p-4 shadow-sm z-10 transition-all duration-1000 ease-in-out flex flex-col items-center justify-center">
+                    <div class="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center mb-1">
+                        <span class="text-xs">❤️</span>
+                    </div>
+                    <p class="font-script text-lg text-gray-400">Read me...</p>
+                </div>
+
+                <div id="flap" class="absolute top-[80px] w-full h-full z-30 transition-transform duration-700 origin-top preserve-3d">
+                    <div class="w-0 h-0 border-l-[150px] border-r-[150px] border-t-[100px] border-l-transparent border-r-transparent border-t-red-400 filter drop-shadow-md"></div>
+                </div>
+                
+                <div class="absolute top-[80px] w-full h-[120px] bg-red-200 rounded-b-lg z-0"></div>
+            </div>
+
+            <div id="read-btn-wrapper" class="mt-20 opacity-0 transition-opacity duration-500 transform translate-y-4">
+                <button onclick="nextScreen('s-envelope', 's-letter')" class="bg-white border-2 border-deepRed text-deepRed px-10 py-3 rounded-full font-bold shadow-sm hover:bg-red-50 transition-colors">
+                    Read Note 💌
+                </button>
+            </div>
+        </div>
+
+        <div id="s-letter" class="absolute inset-0 z-30 hidden flex-col items-center justify-center p-4 opacity-0 transition-opacity duration-700">
+            <div class="bg-paper w-full h-[80%] rounded-2xl shadow-xl p-6 relative flex flex-col border border-orange-100">
+                
+                <div class="absolute -top-6 -right-4 w-20 h-20 animate-pulse-soft">
+                     <img src="1000300227.jpg" class="w-full h-full object-cover rounded-full border-4 border-white shadow-sm" alt="Cute decoration">
+                </div>
+
+                <div class="overflow-y-auto custom-scroll pr-2 flex-grow">
+                    <h3 class="font-bold text-xl text-deepRed mt-2 mb-4 flex items-center gap-2">
+                        <span class="bg-red-100 p-1 rounded-md text-lg">📝</span> Hey My Favorite Person
+                    </h3>
+                    
+                    <div class="space-y-4 text-sm font-semibold leading-relaxed text-gray-600 font-sans">
+                        <p>Hey Love, I may have messed up a bit. I never meant to hurt you, sometimes my brain trips over my heart.</p>
+                        <p>What I <span class="text-deepRed font-bold bg-red-50 px-1 rounded">*do*</span> know for sure is how much you matter to me. You're incredibly special to me, and I hate the idea of being the reason you felt anything less than loved.</p>
+                        <p>Thank you for being you. I hope this makes you smile, even just a little.</p>
+                    </div>
+                    
+                    <p class="text-right mt-8 font-script text-3xl text-deepRed">Always yours 💕</p>
+                </div>
+            </div>
+            
+            <button onclick="nextScreen('s-letter', 's-music')" class="mt-6 bg-deepRed text-white px-12 py-3 rounded-full shadow-lg font-bold active:scale-95 transition-transform">
+                Keep Going ✨
+            </button>
+        </div>
+
+        <div id="s-music" class="absolute inset-0 z-30 hidden flex-col items-center pt-10 pb-4 px-6 opacity-0 transition-opacity duration-700 bg-cream">
+            <div class="text-center mb-6">
+                <p class="font-script text-2xl text-pastelRed">Hope they feel nice</p>
+                <h1 class="font-bold text-3xl text-deepRed leading-tight">Some Songs That<br>Reminded Me of You</h1>
+            </div>
+
+            <div class="w-full overflow-y-auto custom-scroll px-2 pb-20 space-y-6">
+                
+                <div class="cassette-shell cassette-tilted relative w-full h-40 bg-pink-100 rounded-xl border-4 border-white shadow-md p-3 flex flex-col justify-between cursor-pointer" onclick="playTrack(1, this)">
+                    <div class="h-4 bg-pink-200 rounded opacity-50 w-full mb-2"></div>
+                    <div class="absolute top-3 right-3 text-xs text-pink-400 font-bold">SIDE A</div>
+                    
+                    <div class="flex flex-col items-center justify-center z-10">
+                        <h3 class="font-bold text-gray-800">High On You</h3>
+                        <p class="text-[10px] text-pink-500">Basically... my heart, signed over</p>
+                    </div>
+
+                    <div class="bg-white/80 h-14 rounded-md mx-4 mt-1 border border-gray-200 flex items-center justify-center gap-6">
+                        <div class="gear w-8 h-8 rounded-full border-2 border-dashed border-gray-400 bg-gray-100"></div>
+                        <div class="w-12 h-8 bg-gray-800 rounded"></div>
+                        <div class="gear w-8 h-8 rounded-full border-2 border-dashed border-gray-400 bg-gray-100"></div>
+                    </div>
+
+                    <div class="play-icon absolute bottom-2 left-1/2 transform -translate-x-1/2 w-8 h-8 bg-deepRed rounded-full flex items-center justify-center text-white shadow-sm transition-transform">
+                        <svg class="w-4 h-4 ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                    </div>
+                </div>
+
+                <div class="cassette-shell cassette-tilted relative w-full h-40 bg-green-100 rounded-xl border-4 border-white shadow-md p-3 flex flex-col justify-between cursor-pointer" onclick="playTrack(2, this)">
+                    <div class="h-4 bg-green-200 rounded opacity-50 w-full mb-2"></div>
+                    <div class="absolute top-3 right-3 text-xs text-green-500 font-bold">SIDE A</div>
+                    
+                    <div class="flex flex-col items-center justify-center z-10">
+                        <h3 class="font-bold text-gray-800">For a Reason</h3>
+                        <p class="text-[10px] text-green-600">I'd still choose you 🤍</p>
+                    </div>
+
+                    <div class="bg-white/80 h-14 rounded-md mx-4 mt-1 border border-gray-200 flex items-center justify-center gap-6">
+                        <div class="gear w-8 h-8 rounded-full border-2 border-dashed border-gray-400 bg-gray-100"></div>
+                        <div class="w-12 h-8 bg-gray-800 rounded"></div>
+                        <div class="gear w-8 h-8 rounded-full border-2 border-dashed border-gray-400 bg-gray-100"></div>
+                    </div>
+
+                    <div class="play-icon absolute bottom-2 left-1/2 transform -translate-x-1/2 w-8 h-8 bg-deepRed rounded-full flex items-center justify-center text-white shadow-sm transition-transform">
+                        <svg class="w-4 h-4 ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="absolute bottom-6 left-0 w-full flex justify-center z-20">
+                <button onclick="nextScreen('s-music', 's-flip')" class="bg-brown text-white px-10 py-3 rounded-full shadow-lg font-bold hover:bg-gray-800 transition-colors">
+                    Next ➡️
+                </button>
+            </div>
+        </div>
+
+        <div id="s-flip" class="absolute inset-0 z-30 hidden flex-col items-center justify-center p-6 opacity-0 transition-opacity duration-700">
+            <p class="font-script text-2xl text-pastelRed mb-2">just saying...</p>
+            <h1 class="font-bold text-3xl text-brown mb-6">Little Things</h1>
+            
+            <div class="w-64 h-80 perspective-1000 cursor-pointer mb-8" onclick="this.classList.toggle('flipped')">
+                <div class="flip-card-inner shadow-xl rounded-2xl">
+                    <div class="flip-card-front bg-yellow-50 border-2 border-yellow-200 flex flex-col items-center justify-center p-6">
+                        <div class="text-4xl mb-4">🥲</div>
+                        <h2 class="text-xl font-bold text-center text-gray-700">I may have been a little dumb sometimes</h2>
+                        <p class="mt-4 text-xs text-gray-400">(Tap to flip)</p>
+                    </div>
+                    <div class="flip-card-back bg-white border-2 border-red-100 flex flex-col items-center justify-center p-6">
+                         <img src="1000300231.jpg" class="w-24 h-24 object-cover rounded-full mb-3 border-2 border-red-200" alt="Funny Cat">
+                        <p class="text-center text-sm font-semibold text-gray-600 mb-2">But my intentions are pure!</p>
+                        <p class="text-center font-bold text-deepRed text-lg">You get adorably mad btw.</p>
+                    </div>
+                </div>
+            </div>
+
+            <button onclick="nextScreen('s-flip', 's-final')" class="bg-deepRed text-white px-8 py-3 rounded-full font-bold shadow-lg">
+                One Last Thing ➡️
+            </button>
+        </div>
+
+        <div id="s-final" class="absolute inset-0 z-30 hidden flex-col items-center justify-center p-6 opacity-0 transition-opacity duration-700">
+            <h4 class="font-script text-3xl text-pastelRed mb-2">the grand finale...</h4>
+            <h1 class="font-bold text-3xl text-brown mb-6 text-center">One Last Request</h1>
+            
+            <div class="bg-white p-6 rounded-2xl shadow-xl border border-red-100 w-full mb-8 text-center relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-red-200 via-red-400 to-red-200"></div>
+                <p class="text-lg text-gray-700 mb-4 font-medium">I hope this reminded you how important you are to me.</p>
+                <p class="font-bold text-2xl text-deepRed mb-4">You Matter To Me.</p>
+                <div class="flex justify-center gap-3 text-2xl animate-pulse">❤️ ❤️ ❤️</div>
+            </div>
+
+            <button id="seal-btn" onclick="startSealing()" class="bg-green-500 text-white w-full py-4 rounded-full font-bold text-xl shadow-green-200 shadow-xl transition-all active:scale-95 flex items-center justify-center gap-2">
+                Seal It with Love 💌
+            </button>
+        </div>
+
+        <div id="sealing-overlay" class="absolute inset-0 z-[100] hidden flex-col items-center justify-center bg-black/60 backdrop-blur-md transition-opacity duration-500">
+            <div id="sealing-anim" class="flex flex-col items-center">
+                <div class="loader-ring text-white mb-4"></div>
+                <p class="text-white font-bold text-xl tracking-widest animate-pulse">SEALING IT...</p>
+            </div>
+            
+            <div id="sealed-success" class="hidden flex-col items-center transform scale-0 transition-transform duration-500">
+                <div class="w-32 h-32 bg-white rounded-full flex items-center justify-center shadow-2xl mb-4 border-4 border-gold">
+                    <span class="text-6xl">💌</span>
+                </div>
+                <h2 class="text-white text-3xl font-script font-bold">Sent!</h2>
+                <p class="text-white/80 mt-2">Love delivered successfully.</p>
+                <button onclick="location.reload()" class="mt-8 text-white text-sm underline opacity-70 hover:opacity-100">Replay?</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // ================= CONFIGURATION =================
+        // Replace these URLs with your actual MP3 links if different
+        const songs = {
+            1: "https://files.catbox.moe/4giqf5.ogg", // Example URL 1
+            2: "https://files.catbox.moe/uhkx81.ogg"  // Example URL 2
+        };
+
+        const audio = document.getElementById('bg-music');
+        let currentCassetteDiv = null;
+
+        // ================= NAVIGATION =================
+        function nextScreen(hideId, showId) {
+            const hideEl = document.getElementById(hideId);
+            const showEl = document.getElementById(showId);
+            
+            hideEl.style.opacity = '0';
+            setTimeout(() => {
+                hideEl.classList.add('hidden');
+                hideEl.classList.remove('flex');
+                
+                showEl.classList.remove('hidden');
+                showEl.classList.add('flex');
+                // Trigger reflow
+                void showEl.offsetWidth; 
+                showEl.style.opacity = '1';
+            }, 500);
+        }
+
+        // ================= PASSWORD LOGIC =================
+        function checkPass() {
+            const input = document.getElementById('pass-input');
+            const val = input.value.trim().toUpperCase();
+            
+            if (val === "UMMM") {
+                nextScreen('s-pass', 's-load');
+                // Fake loading time then go to landing
+                setTimeout(() => {
+                    nextScreen('s-load', 's-land');
+                }, 3500);
+            } else {
+                input.style.borderColor = 'red';
+                input.classList.add('animate-pulse');
+                document.getElementById('error-msg').style.opacity = '1';
+                setTimeout(() => {
+                    input.style.borderColor = '#FF8FA3';
+                    input.classList.remove('animate-pulse');
+                }, 1000);
+            }
+        }
+
+        // ================= ENVELOPE LOGIC =================
+        function triggerLetterAnimation() {
+            const flap = document.getElementById('flap');
+            const letter = document.getElementById('letter-card');
+            const btn = document.getElementById('read-btn-wrapper');
+            
+            // Open Flap (Rotate X 180deg)
+            flap.style.transform = "rotateX(180deg)";
+            flap.style.zIndex = "0"; // Move flap behind letter
+
+            // Slide Letter Up
+            setTimeout(() => {
+                letter.style.transform = "translateY(-140px)";
+                letter.style.zIndex = "20";
+            }, 500);
+
+            // Show Button
+            setTimeout(() => {
+                btn.style.opacity = '1';
+                btn.style.transform = 'translateY(0)';
+            }, 1200);
+        }
+
+        // ================= MUSIC LOGIC (INSTANT & PERSISTENT) =================
+        function playTrack(id, divElement) {
+            const src = songs[id];
+            
+            // 1. Visual Reset (Tilt all cassettes back)
+            document.querySelectorAll('.cassette-shell').forEach(el => {
+                el.classList.remove('cassette-playing');
+                el.classList.add('cassette-tilted');
+                // Stop gears
+                el.querySelectorAll('.gear').forEach(g => g.classList.remove('spin-slow'));
+                // Reset Play Icon
+                el.querySelector('.play-icon').innerHTML = '<svg class="w-4 h-4 ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
+            });
+
+            // 2. Logic: If clicking same song playing, pause it. Else, play new.
+            if (!audio.paused && audio.src === src) {
+                audio.pause();
+                return;
+            }
+
+            // 3. Play New Song
+            audio.src = src;
+            audio.play().catch(e => console.log("Interaction needed first"));
+            
+            // 4. Visual Activate (Straighten specific cassette)
+            divElement.classList.remove('cassette-tilted');
+            divElement.classList.add('cassette-playing');
+            
+            // Spin gears
+            divElement.querySelectorAll('.gear').forEach(g => g.classList.add('spin-slow'));
+            
+            // Change Icon to Pause
+            divElement.querySelector('.play-icon').innerHTML = '<svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>';
+        }
+
+        // ================= SEALING LOGIC (NEW) =================
+        function startSealing() {
+            const overlay = document.getElementById('sealing-overlay');
+            const anim = document.getElementById('sealing-anim');
+            const success = document.getElementById('sealed-success');
+            
+            // Show Overlay
+            overlay.classList.remove('hidden');
+            overlay.classList.add('flex');
+            
+            // 1. Wait for "Sealing..." animation (2.5 seconds)
+            setTimeout(() => {
+                anim.classList.add('hidden');
+                success.classList.remove('hidden');
+                
+                // Pop effect
+                setTimeout(() => {
+                    success.classList.remove('scale-0');
+                    success.classList.add('scale-100');
+                    fireConfetti();
+                }, 100);
+                
+            }, 2500);
+        }
+
+        function fireConfetti() {
+            const duration = 3000;
+            const end = Date.now() + duration;
+
+            (function frame() {
+                confetti({
+                    particleCount: 5,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0 },
+                    colors: ['#FF8FA3', '#D65D5D', '#FFF']
+                });
+                confetti({
+                    particleCount: 5,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1 },
+                    colors: ['#FF8FA3', '#D65D5D', '#FFF']
+                });
+
+                if (Date.now() < end) {
+                    requestAnimationFrame(frame);
+                }
+            }());
+        }
+    </script>
+</body>
+</html>
