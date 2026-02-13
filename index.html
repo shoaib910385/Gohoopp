@@ -3,419 +3,273 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Specially For You</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&family=Sacramento&display=swap" rel="stylesheet">
+    <title>Specially For You | A Love Story</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
-    
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&family=Sacramento&family=Indie+Flower&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        cream: '#FFF5E4',
-                        red: {
-                            400: '#FF8FA3',
-                            500: '#D65D5D',
-                            600: '#C04D4D',
-                        },
-                        brown: '#5D4037',
-                        paper: '#FFFDF9'
+                        cream: '#FFF9EE',
+                        softPink: '#FF8FA3',
+                        deepRed: '#D65D5D',
+                        accentGreen: '#E6F4EA',
                     },
                     fontFamily: {
                         sans: ['Nunito', 'sans-serif'],
                         script: ['Sacramento', 'cursive'],
-                    },
-                    animation: {
-                        'fly': 'fly 6s linear infinite',
-                        'float': 'float 3s ease-in-out infinite',
-                        'pop': 'pop 0.3s ease-out forwards',
-                        'fade-in': 'fadeIn 1s ease-out forwards',
-                    },
-                    keyframes: {
-                        fly: {
-                            '0%': { transform: 'translateX(-100%) translateY(20px) rotate(5deg)' },
-                            '50%': { transform: 'translateX(0%) translateY(-20px) rotate(-5deg)' },
-                            '100%': { transform: 'translateX(100%) translateY(20px) rotate(5deg)' },
-                        },
-                        float: {
-                            '0%, 100%': { transform: 'translateY(0)' },
-                            '50%': { transform: 'translateY(-10px)' },
-                        },
-                        pop: {
-                            '0%': { transform: 'scale(0.9)', opacity: '0' },
-                            '100%': { transform: 'scale(1)', opacity: '1' },
-                        },
-                        fadeIn: {
-                            '0%': { opacity: '0' },
-                            '100%': { opacity: '1' },
-                        }
+                        hand: ['Indie Flower', 'cursive']
                     }
                 }
             }
         }
     </script>
 
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-
     <style>
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-thumb { background: #FF8FA3; border-radius: 10px; }
+        /* Modern UI Tweaks */
+        body { background-color: #FFF9EE; overflow-x: hidden; touch-action: manipulation; }
+        .glass-card { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.3); }
         
-        body { -webkit-tap-highlight-color: transparent; }
+        /* Cassette Logic */
+        .cassette-tilted { transform: rotate(-3deg) translateY(10px); transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .cassette-active { transform: rotate(0deg) translateY(0); border-color: #FF8FA3; box-shadow: 0 20px 40px rgba(214, 93, 93, 0.2); }
         
-        /* 3D Flip Card Classes */
-        .perspective-1000 { perspective: 1000px; }
-        .transform-style-3d { transform-style: preserve-3d; }
-        .backface-hidden { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
-        .rotate-y-180 { transform: rotateY(180deg); }
-
-        /* Envelope Animation */
-        .envelope-flap {
-            transform-origin: top;
-            transition: transform 0.6s ease-in-out;
-        }
-        .envelope-open .envelope-flap {
-            transform: rotateX(180deg);
-            z-index: 0;
-        }
-        .letter-content {
-            transition: transform 0.6s ease-in-out 0.4s;
-        }
-        .envelope-open .letter-content {
-            transform: translateY(-120px);
-            z-index: 20;
-        }
+        /* Smooth Page Transitions */
+        .screen { transition: all 0.8s ease-in-out; position: absolute; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
+        .hidden-screen { opacity: 0; pointer-events: none; transform: translateY(20px); }
         
-        /* Cassette Animation */
-        .spin-slow { animation: spin 3s linear infinite; }
+        /* Sealing Animation */
+        #seal-overlay { position: fixed; inset: 0; background: rgba(255, 245, 228, 0.7); backdrop-filter: blur(15px); z-index: 100; display: none; align-items: center; justify-content: center; flex-direction: column; }
+        
+        /* Floating Assets */
+        .float-img { animation: float 4s ease-in-out infinite; }
+        @keyframes float { 0%, 100% { transform: translateY(0) rotate(var(--rot)); } 50% { transform: translateY(-15px) rotate(var(--rot)); } }
+        
+        /* Gears */
+        .gear-spin { animation: spin 2s linear infinite; }
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+        .btn-main { background: #D65D5D; color: white; border-radius: 999px; padding: 12px 32px; font-weight: 800; box-shadow: 0 10px 20px rgba(214, 93, 93, 0.3); transition: all 0.3s; display: flex; align-items: center; gap: 8px; }
+        .btn-main:active { transform: scale(0.95); }
     </style>
 </head>
-<body class="bg-cream text-brown h-screen w-screen overflow-hidden flex justify-center items-center">
+<body class="font-sans text-[#5D4037]">
 
-    <div class="relative w-full h-full max-w-[480px] bg-cream shadow-2xl overflow-hidden flex flex-col">
-
-        <div id="screen-pass" class="absolute inset-0 z-50 flex flex-col items-center justify-center bg-cream p-8 transition-opacity duration-700">
-            <h1 class="font-script text-6xl text-red-500 mb-2">Hey Love</h1>
-            <p class="mb-8 opacity-70">There is a secret word...</p>
-            <input type="password" id="pass-input" placeholder="Password" 
-                class="w-full max-w-[250px] p-4 text-center text-xl rounded-full border-2 border-red-200 focus:border-red-500 focus:outline-none shadow-sm mb-6 bg-white text-brown placeholder-red-200 transition-all">
-            <button onclick="checkPass()" class="bg-red-500 text-white px-8 py-3 rounded-full font-bold shadow-lg hover:scale-105 active:scale-95 transition-transform duration-200">
-                Unlock ❤️
-            </button>
+    <div id="main-app" class="relative w-full h-screen max-w-[480px] mx-auto overflow-hidden">
+        
+        <div id="scr-pass" class="screen">
+            <h1 class="font-script text-6xl text-deepRed mb-4">Hey Love 😘</h1>
+            <p class="mb-8 opacity-60">Please enter the secret password</p>
+            <input type="password" id="pass-val" placeholder="Password" class="w-64 p-4 rounded-2xl border-2 border-softPink text-center text-xl focus:outline-none focus:ring-4 focus:ring-softPink/20 transition-all mb-6">
+            <button onclick="checkPass()" class="btn-main">Unlock ❤️</button>
         </div>
 
-        <div id="screen-splash" class="absolute inset-0 z-40 hidden flex-col items-center justify-center bg-cream pointer-events-none opacity-0 transition-opacity duration-700">
-            <div class="w-full h-40 relative mb-8">
-                <img src="assets/plane.png" class="w-32 absolute top-0 left-0 animate-fly" alt="Flying Hello Kitty">
-            </div>
-            <h2 class="text-2xl font-bold text-red-500 animate-pulse">Loading special memories...</h2>
-        </div>
-
-        <div id="screen-landing" class="absolute inset-0 z-30 hidden flex-col items-center justify-center p-6 opacity-0 transition-opacity duration-1000">
-            <div class="relative bg-green-50/80 border border-green-100 p-8 rounded-[30px] shadow-xl w-full text-center">
-                <img src="assets/image2.png" class="absolute -top-12 -right-4 w-24 transform rotate-12 drop-shadow-md animate-float">
+        <div id="scr-land" class="screen hidden-screen">
+            <div class="relative w-full glass-card p-10 rounded-[40px] border-2 border-accentGreen shadow-2xl">
+                <img src="assets/pineapple.png" style="--rot: 12deg" class="float-img absolute -top-12 -right-4 w-28 drop-shadow-lg" alt="Cat Pineapple">
                 
-                <p class="font-script text-3xl text-red-400 mb-2">welcome to my little thought...</p>
-                <h1 class="font-bold text-5xl text-red-600 mb-6 drop-shadow-sm">Hey You</h1>
+                <h4 class="font-script text-3xl text-softPink mb-2">welcome to my little thought...</h4>
+                <h1 class="text-5xl font-extrabold text-deepRed mb-6 tracking-tight">Hey You</h1>
                 
-                <p class="text-lg leading-relaxed mb-8 text-gray-600">
-                    I wanted to do a tiny something because you mean a lot to me.
-                </p>
-
-                <p class="text-sm text-red-400 italic mb-4">Tap below, okay? ✨</p>
+                <p class="text-lg leading-relaxed mb-10 text-gray-600">I wanted to do a tiny something because you mean a lot to me.</p>
+                <p class="text-sm text-softPink font-bold mb-4">Tap below, okay? ✨</p>
                 
-                <button onclick="navigate('screen-landing', 'screen-envelope')" 
-                    class="bg-red-500 text-white w-full py-4 rounded-full font-bold text-xl shadow-red-200 shadow-xl hover:shadow-2xl transition-all active:scale-95 flex items-center justify-center gap-2">
-                    Open This 💖 <span>→</span>
+                <button onclick="go('scr-land', 'scr-env')" class="btn-main w-full justify-center text-xl py-5">
+                    Open This 💖 <span class="text-2xl">→</span>
                 </button>
 
-                <img src="assets/image3.png" class="absolute -bottom-8 -left-4 w-20 transform -rotate-12 drop-shadow-md delay-1000">
+                <img src="assets/glasses.png" style="--rot: -10deg" class="float-img absolute -bottom-10 -left-6 w-24 drop-shadow-lg" alt="Cat Glasses">
             </div>
         </div>
 
-        <div id="screen-envelope" class="absolute inset-0 z-30 hidden flex-col items-center justify-center p-6 opacity-0 transition-opacity duration-700">
-            <h1 class="font-script text-5xl text-red-500 mb-8">A Little Note 💌</h1>
+        <div id="scr-env" class="screen hidden-screen">
+            <h4 class="text-orange-400 font-bold mb-2">Straight from my heart</h4>
+            <h1 class="font-script text-5xl text-deepRed mb-12">A Little Note 💌</h1>
             
-            <div class="relative w-full max-w-[320px] h-[220px] cursor-pointer group" onclick="openLetter()">
-                <div class="absolute bottom-0 w-full h-[140px] bg-red-200 rounded-b-xl z-20 shadow-xl overflow-hidden"></div>
-                <div class="absolute bottom-0 w-full h-[140px] bg-red-300 rounded-b-xl z-20 clip-path-triangle"></div>
-                
-                <div id="letter-preview" class="letter-content absolute bottom-2 left-4 right-4 h-[120px] bg-white rounded-lg p-4 shadow-sm z-10 flex items-center justify-center">
-                    <p class="font-script text-xl text-gray-400">Read me...</p>
+            <div class="relative w-72 h-48 cursor-pointer group" onclick="openEnv()">
+                <div id="env-flap" class="absolute top-0 w-full h-0 border-l-[144px] border-r-[144px] border-t-[100px] border-l-transparent border-r-transparent border-t-[#E0C9A6] z-30 transition-transform duration-700 origin-top"></div>
+                <div class="absolute bottom-0 w-full h-32 bg-[#DCBFA0] rounded-b-xl z-20 shadow-xl"></div>
+                <div id="letter" class="absolute bottom-4 left-4 right-4 h-32 bg-white rounded-lg z-10 transition-transform duration-700 flex items-center justify-center p-4">
+                    <p class="font-hand text-gray-400">Pull me out...</p>
                 </div>
-
-                <div id="envelope-flap" class="envelope-flap absolute top-[80px] w-full h-full z-30">
-                    <div class="w-0 h-0 border-l-[160px] border-r-[160px] border-t-[110px] border-l-transparent border-r-transparent border-t-red-400 drop-shadow-md"></div>
-                </div>
-            </div>
-
-            <div id="open-btn-container" class="mt-24 opacity-0 transition-opacity duration-500">
-                <button onclick="navigate('screen-envelope', 'screen-letter')" class="bg-white border-2 border-red-500 text-red-500 px-8 py-3 rounded-full font-bold shadow-sm hover:bg-red-50 transition-colors">
-                    Read It ✨
-                </button>
-            </div>
-        </div>
-
-        <div id="screen-letter" class="absolute inset-0 z-30 hidden flex-col items-center justify-center p-4 opacity-0 transition-opacity duration-700">
-            <div class="bg-paper w-full h-[85%] rounded-2xl shadow-2xl p-6 relative overflow-y-auto border border-yellow-100">
-                <img src="assets/image4.png" class="absolute top-2 right-2 w-20 opacity-90">
-                
-                <h3 class="font-bold text-2xl text-red-500 mt-4 mb-6">Hey My Favorite Person,</h3>
-                
-                <div class="space-y-4 text-lg font-medium leading-relaxed text-gray-700 font-sans">
-                    <p>
-                        Hey Love, I may have messed up a bit. I never meant to hurt you, sometimes my brain trips over my heart.
-                    </p>
-                    <p>
-                        What I <span class="text-red-500 font-bold">*do*</span> know for sure is how much you matter to me. You're incredibly special to me, and I hate the idea of being the reason you felt anything less than loved.
-                    </p>
-                    <p>
-                        Thank you for being you. I hope this makes you smile, even just a little.
-                    </p>
-                </div>
-                
-                <p class="text-right mt-8 font-script text-3xl text-red-500">Always yours 💕</p>
             </div>
             
-            <button onclick="navigate('screen-letter', 'screen-music')" class="mt-4 bg-red-500 text-white px-10 py-3 rounded-full shadow-lg font-bold hover:scale-105 transition-transform">
-                Keep Going ✨
-            </button>
+            <div id="env-btn" class="mt-20 opacity-0 pointer-events-none transition-opacity duration-500">
+                <button onclick="go('scr-env', 'scr-letter')" class="btn-main">Read It ✨</button>
+            </div>
         </div>
 
-        <div id="screen-music" class="absolute inset-0 z-30 hidden flex-col items-center justify-center p-6 opacity-0 transition-opacity duration-700">
-            <h1 class="font-script text-5xl text-red-500 mb-2">Songs For You</h1>
-            <p class="text-gray-500 mb-8 text-sm">Tap play to listen</p>
+        <div id="scr-letter" class="screen hidden-screen">
+            <div class="bg-white w-full h-[80vh] rounded-3xl shadow-2xl p-8 relative overflow-y-auto border border-pink-100">
+                <img src="assets/ribbon.png" class="absolute top-4 right-4 w-20 opacity-80" alt="Cat Ribbon">
+                <h3 class="font-bold text-2xl text-deepRed mb-6 flex items-center gap-2">
+                    <span class="bg-orange-100 p-2 rounded-full">💝</span> Hey My Favorite Person
+                </h3>
+                <div class="font-hand text-xl leading-relaxed text-gray-700 space-y-6">
+                    <p>Hey Love, I may have messed up a bit. I never meant to hurt you, sometimes my brain trips over my heart.</p>
+                    <p>What I *do* know for sure is how much you matter to me. You're incredibly special to me, and I hate the idea of being the reason you felt anything less than loved.</p>
+                    <p>Thank you for being you. I hope this makes you smile, even just a little.</p>
+                </div>
+                <p class="text-right font-script text-4xl text-deepRed mt-10">Always yours 💕</p>
+            </div>
+            <button onclick="go('scr-letter', 'scr-music')" class="btn-main mt-6">Keep Going ✨</button>
+        </div>
 
-            <div class="cassette-player w-full bg-red-50 rounded-2xl p-4 border-2 border-white shadow-lg mb-6 relative overflow-hidden">
-                <div class="flex justify-between text-xs font-bold text-red-300 mb-2 tracking-widest">
-                    <span>SIDE A</span><span>3:45</span>
+        <div id="scr-music" class="screen hidden-screen">
+            <h1 class="font-script text-5xl text-deepRed mb-8">Reminded Me Of You</h1>
+            
+            <div class="cassette-tilted w-full glass-card p-6 rounded-3xl mb-6 relative border-2" id="cas-1">
+                <div class="flex justify-between text-[10px] font-bold text-gray-400 mb-2"><span>SIDE A</span><span>KARAN AUJLA</span></div>
+                <h2 class="text-xl font-bold text-center mb-4">For a Reason</h2>
+                <div class="bg-gray-800 h-14 rounded-xl flex items-center justify-center gap-10">
+                    <div class="gear w-8 h-8 rounded-full border-4 border-dashed border-gray-600"></div>
+                    <div class="gear w-8 h-8 rounded-full border-4 border-dashed border-gray-600"></div>
                 </div>
-                <div class="text-center mb-4">
-                    <h3 class="font-bold text-xl text-gray-800">For a Reason</h3>
-                    <p class="text-xs text-gray-500">Karan Aujla</p>
-                </div>
-                <div class="bg-gray-800 rounded h-12 w-3/4 mx-auto flex items-center justify-center gap-8 relative">
-                    <div class="gear w-8 h-8 rounded-full border-2 border-dashed border-gray-400 bg-white/20"></div>
-                    <div class="gear w-8 h-8 rounded-full border-2 border-dashed border-gray-400 bg-white/20"></div>
-                </div>
-                <button onclick="playMusic(1, this)" class="absolute bottom-2 right-4 w-12 h-12 bg-red-500 rounded-full flex items-center justify-center text-white shadow-lg z-10 hover:bg-red-600 transition-colors">
-                    <svg class="w-5 h-5 ml-1 icon-play" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                    <svg class="w-5 h-5 hidden icon-pause" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+                <button onclick="toggleMusic(1, this)" class="absolute -bottom-4 left-1/2 -translate-x-1/2 w-14 h-14 bg-deepRed rounded-full flex items-center justify-center text-white shadow-xl">
+                    <span class="text-2xl play-icon">▶</span>
                 </button>
             </div>
 
-            <div class="cassette-player w-full bg-blue-50 rounded-2xl p-4 border-2 border-white shadow-lg mb-8 relative overflow-hidden">
-                <div class="flex justify-between text-xs font-bold text-blue-300 mb-2 tracking-widest">
-                    <span>SIDE B</span><span>2:20</span>
+            <div class="cassette-tilted w-full bg-[#F3F0FF] p-6 rounded-3xl mb-12 relative border-2" id="cas-2">
+                <div class="flex justify-between text-[10px] font-bold text-gray-400 mb-2"><span>SIDE B</span><span>KARAN AUJLA</span></div>
+                <h2 class="text-xl font-bold text-center mb-4">Boyfriend</h2>
+                <div class="bg-gray-800 h-14 rounded-xl flex items-center justify-center gap-10">
+                    <div class="gear w-8 h-8 rounded-full border-4 border-dashed border-gray-600"></div>
+                    <div class="gear w-8 h-8 rounded-full border-4 border-dashed border-gray-600"></div>
                 </div>
-                <div class="text-center mb-4">
-                    <h3 class="font-bold text-xl text-gray-800">Boyfriend</h3>
-                    <p class="text-xs text-gray-500">Karan Aujla</p>
-                </div>
-                <div class="bg-gray-800 rounded h-12 w-3/4 mx-auto flex items-center justify-center gap-8 relative">
-                    <div class="gear w-8 h-8 rounded-full border-2 border-dashed border-gray-400 bg-white/20"></div>
-                    <div class="gear w-8 h-8 rounded-full border-2 border-dashed border-gray-400 bg-white/20"></div>
-                </div>
-                <button onclick="playMusic(2, this)" class="absolute bottom-2 right-4 w-12 h-12 bg-blue-400 rounded-full flex items-center justify-center text-white shadow-lg z-10 hover:bg-blue-500 transition-colors">
-                    <svg class="w-5 h-5 ml-1 icon-play" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                    <svg class="w-5 h-5 hidden icon-pause" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+                <button onclick="toggleMusic(2, this)" class="absolute -bottom-4 left-1/2 -translate-x-1/2 w-14 h-14 bg-indigo-500 rounded-full flex items-center justify-center text-white shadow-xl">
+                    <span class="text-2xl play-icon">▶</span>
                 </button>
             </div>
 
-            <button onclick="stopMusic(); navigate('screen-music', 'screen-flip')" class="bg-brown text-white px-10 py-3 rounded-full shadow-lg font-bold">
-                Next ✨
-            </button>
+            <button onclick="go('scr-music', 'scr-flip')" class="btn-main">Next ✨</button>
         </div>
 
-        <div id="screen-flip" class="absolute inset-0 z-30 hidden flex-col items-center justify-center p-6 opacity-0 transition-opacity duration-700">
-            <h4 class="font-script text-3xl text-red-400 mb-2">just saying...</h4>
-            <h1 class="font-bold text-4xl text-brown mb-2">Little Things</h1>
-            <p class="text-gray-400 text-sm mb-8">Tap the card to flip ⤵️</p>
-
-            <div class="group w-64 h-80 perspective-1000 cursor-pointer" onclick="toggleFlip(this)">
-                <div class="relative w-full h-full duration-700 transform-style-3d transition-transform shadow-xl rounded-2xl" id="flip-inner">
-                    <div class="absolute w-full h-full bg-red-100 rounded-2xl backface-hidden flex flex-col items-center justify-center p-6 border-2 border-red-200">
-                        <h2 class="text-2xl font-bold text-center text-red-500">I may have been a little dumb sometimes 🥲</h2>
+        <div id="scr-flip" class="screen hidden-screen">
+            <h4 class="font-script text-3xl text-softPink mb-2">just saying...</h4>
+            <h1 class="text-3xl font-extrabold text-center mb-8">Little Things I Messed Up</h1>
+            
+            <div class="relative w-72 h-96 [perspective:1000px] cursor-pointer" onclick="this.querySelector('.flip-inner').classList.toggle('[transform:rotateY(180deg)]')">
+                <div class="flip-inner relative w-full h-full transition-all duration-700 [transform-style:preserve-3d] shadow-2xl rounded-[30px]">
+                    <div class="absolute inset-0 bg-white p-8 flex flex-col items-center justify-center text-center [backface-visibility:hidden] rounded-[30px]">
+                        <p class="text-2xl font-bold mb-4">I may have been a little dumb sometimes 🥲</p>
+                        <p class="text-gray-400">Tap to see why...</p>
                     </div>
-                    <div class="absolute w-full h-full bg-white rounded-2xl backface-hidden rotate-y-180 flex flex-col items-center justify-center p-6 border-2 border-red-200">
-                        <img src="assets/cat-tomato.png" class="w-20 mb-4 rounded-full shadow-sm" onerror="this.style.display='none'">
-                        <h3 class="font-bold text-xl mb-2">But...</h3>
-                        <p class="text-center text-sm text-gray-600 mb-2">My intentions are always to make you happy. I'm working on it!</p>
-                        <p class="text-center font-bold text-red-500">You get adorably mad btw.</p>
+                    <div class="absolute inset-0 bg-[#FFF5F5] p-6 flex flex-col items-center justify-center text-center [transform:rotateY(180deg)] [backface-visibility:hidden] rounded-[30px] border-4 border-white">
+                        <img src="assets/tomato.png" class="w-32 mb-4 rounded-2xl" alt="Cat Tomato">
+                        <p class="font-bold text-deepRed mb-2">Context:</p>
+                        <p class="text-sm text-gray-600">No bad intentions, just bad timing. I'm working on it. 🥺</p>
                     </div>
                 </div>
             </div>
-
-            <button onclick="navigate('screen-flip', 'screen-final')" class="mt-12 bg-red-500 text-white px-8 py-3 rounded-full font-bold shadow-lg">
-                One Last Thing ➡️
-            </button>
+            
+            <button onclick="go('scr-flip', 'scr-final')" class="btn-main mt-10">One Last Thing ➡️</button>
         </div>
 
-        <div id="screen-final" class="absolute inset-0 z-30 hidden flex-col items-center justify-center p-6 opacity-0 transition-opacity duration-700">
-            <h4 class="font-script text-4xl text-red-400 mb-2">the grand finale...</h4>
-            <h1 class="font-bold text-4xl text-brown mb-6 text-center">Will You Forgive Me?</h1>
+        <div id="scr-final" class="screen hidden-screen">
+            <h4 class="font-script text-3xl text-orange-400 mb-2">the grand finale...</h4>
+            <h1 class="text-4xl font-extrabold text-deepRed mb-8">Will You Forgive Me?</h1>
             
-            <div class="bg-white p-8 rounded-2xl shadow-xl border-2 border-red-100 w-full mb-8 text-center">
-                <p class="text-lg text-gray-700 mb-4">I hope this reminded you how important you are to me.</p>
-                <p class="font-bold text-2xl text-red-500 mb-4">You Matter To Me.</p>
-                <div class="flex justify-center gap-2 text-2xl">❤️ ❤️ ❤️</div>
+            <div class="glass-card p-10 rounded-[40px] w-full text-center relative mb-10 border-2 border-red-100">
+                <img src="assets/spidey.png" class="absolute -top-16 left-1/2 -translate-x-1/2 w-32 drop-shadow-xl" alt="Spidey Cat">
+                <p class="text-xl mb-6 mt-8">I hope this reminded you how important you are to me.</p>
+                <p class="text-2xl font-black text-deepRed">You Matter To Me.</p>
+                <div class="mt-6 flex justify-center gap-1">❤️❤️❤️❤️❤️❤️</div>
             </div>
 
-            <button id="seal-btn" onclick="celebrate()" class="bg-green-500 text-white w-full py-4 rounded-full font-bold text-xl shadow-green-200 shadow-xl transition-all active:scale-95">
-                Seal It 💌
-            </button>
-            
-            <button onclick="location.reload()" class="mt-6 text-gray-400 text-sm underline">
-                Restart
-            </button>
+            <button id="seal-btn" onclick="sealIt()" class="btn-main w-full justify-center py-5 text-xl">Seal It 💌</button>
         </div>
 
     </div>
 
+    <div id="seal-overlay">
+        <div class="bg-white p-12 rounded-[50px] shadow-2xl flex flex-col items-center">
+            <div class="relative w-24 h-24 mb-6">
+                <div class="absolute inset-0 border-8 border-softPink/20 rounded-full"></div>
+                <div class="absolute inset-0 border-8 border-softPink rounded-full border-t-transparent animate-spin"></div>
+                <span class="absolute inset-0 flex items-center justify-center text-4xl">💌</span>
+            </div>
+            <h2 class="text-2xl font-bold text-deepRed animate-pulse">Wrapping this up gently...</h2>
+        </div>
+    </div>
+
     <script>
-        // === SONGS CONFIGURATION ===
-        const songs = {
-            1: "https://files.catbox.moe/4giqf5.ogg", // Karan Aujla 1
-            2: "https://files.catbox.moe/uhkx81.ogg"  // Karan Aujla 2
+        // GLOBAL AUDIO PLAYER (Fixed: Doesn't stop on page change)
+        let globalAudio = new Audio();
+        const songUrls = {
+            1: "https://files.catbox.moe/4giqf5.ogg",
+            2: "https://files.catbox.moe/uhkx81.ogg"
         };
 
-        let currentAudio = new Audio();
-        let currentBtn = null;
-
-        // Navigation Helper
-        function navigate(fromId, toId) {
-            const fromEl = document.getElementById(fromId);
-            const toEl = document.getElementById(toId);
-            
-            fromEl.style.opacity = '0';
+        function go(from, to) {
+            document.getElementById(from).classList.add('hidden-screen');
             setTimeout(() => {
-                fromEl.classList.add('hidden');
-                fromEl.classList.remove('flex');
-                
-                toEl.classList.remove('hidden');
-                toEl.classList.add('flex');
-                
-                // Trigger reflow
-                void toEl.offsetWidth; 
-                
-                toEl.style.opacity = '1';
-            }, 500);
-        }
-
-        // Password Logic
-        function checkPass() {
-            const pass = document.getElementById('pass-input').value;
-            if (pass.toUpperCase() === "UMMM") {
-                navigate('screen-pass', 'screen-splash');
-                
-                // Simulate loading
-                setTimeout(() => {
-                    navigate('screen-splash', 'screen-landing');
-                }, 4000);
-            } else {
-                const input = document.getElementById('pass-input');
-                input.classList.add('border-red-600', 'shake');
-                setTimeout(() => input.classList.remove('border-red-600', 'shake'), 500);
-            }
-        }
-
-        // Envelope Logic
-        function openLetter() {
-            const flap = document.getElementById('envelope-flap');
-            const preview = document.getElementById('letter-preview');
-            const container = document.getElementById('screen-envelope');
-            
-            container.classList.add('envelope-open');
-            
-            setTimeout(() => {
-                document.getElementById('open-btn-container').style.opacity = '1';
+                document.getElementById(from).classList.add('hidden');
+                document.getElementById(to).classList.remove('hidden');
+                setTimeout(() => document.getElementById(to).classList.remove('hidden-screen'), 50);
             }, 800);
         }
 
-        // Music Logic
-        function playMusic(id, btn) {
-            // Reset previous button if exists
-            if (currentBtn && currentBtn !== btn) {
-                resetButton(currentBtn);
+        function checkPass() {
+            if(document.getElementById('pass-val').value.toUpperCase() === "UMMM") {
+                go('scr-pass', 'scr-land');
+            } else {
+                alert("Wrong password! Try UMMM");
             }
+        }
 
-            // Check if pausing same song
-            if (!currentAudio.paused && currentAudio.src === songs[id]) {
-                currentAudio.pause();
-                resetButton(btn);
-                return;
+        function openEnv() {
+            document.getElementById('env-flap').style.transform = 'rotateX(180deg)';
+            document.getElementById('letter').style.transform = 'translateY(-100px)';
+            document.getElementById('env-btn').classList.remove('opacity-0', 'pointer-events-none');
+        }
+
+        function toggleMusic(id, btn) {
+            const cas = document.getElementById(`cas-${id}`);
+            const gears = cas.querySelectorAll('.gear');
+            const icon = btn.querySelector('.play-icon');
+
+            if (globalAudio.src === songUrls[id] && !globalAudio.paused) {
+                globalAudio.pause();
+                icon.innerText = "▶";
+                cas.classList.remove('cassette-active');
+                gears.forEach(g => g.classList.remove('gear-spin'));
+            } else {
+                // Instant play logic
+                globalAudio.src = songUrls[id];
+                globalAudio.play();
+                
+                // Reset all UIs first
+                document.querySelectorAll('.cassette-tilted').forEach(c => c.classList.remove('cassette-active'));
+                document.querySelectorAll('.gear').forEach(g => g.classList.remove('gear-spin'));
+                document.querySelectorAll('.play-icon').forEach(i => i.innerText = "▶");
+
+                // Activate current
+                icon.innerText = "⏸";
+                cas.classList.add('cassette-active');
+                gears.forEach(g => g.classList.add('gear-spin'));
             }
-
-            // Play new song
-            currentAudio.src = songs[id];
-            currentAudio.play().catch(e => alert("Please interact with the page first!"));
-            
-            // Update UI
-            btn.querySelector('.icon-play').classList.add('hidden');
-            btn.querySelector('.icon-pause').classList.remove('hidden');
-            
-            // Add spin animation to gears
-            const gears = btn.closest('.cassette-player').querySelectorAll('.gear');
-            gears.forEach(g => g.classList.add('spin-slow'));
-            
-            currentBtn = btn;
-
-            // Auto reset on end
-            currentAudio.onended = () => resetButton(btn);
         }
 
-        function stopMusic() {
-            currentAudio.pause();
-            currentAudio.currentTime = 0;
-            if(currentBtn) resetButton(currentBtn);
-        }
-
-        function resetButton(btn) {
-            btn.querySelector('.icon-play').classList.remove('hidden');
-            btn.querySelector('.icon-pause').classList.add('hidden');
-            const gears = btn.closest('.cassette-player').querySelectorAll('.gear');
-            gears.forEach(g => g.classList.remove('spin-slow'));
-        }
-
-        // Flip Card Logic
-        function toggleFlip(container) {
-            const inner = container.querySelector('div');
-            inner.classList.toggle('rotate-y-180');
-        }
-
-        // Final Celebration
-        function celebrate() {
-            const btn = document.getElementById('seal-btn');
-            btn.innerText = "Sent with Love! ❤️";
+        function sealIt() {
+            const overlay = document.getElementById('seal-overlay');
+            overlay.style.display = 'flex';
             
-            // Fire confetti
-            const duration = 3000;
-            const end = Date.now() + duration;
-
-            (function frame() {
-                confetti({
-                    particleCount: 5,
-                    angle: 60,
-                    spread: 55,
-                    origin: { x: 0 },
-                    colors: ['#ff0000', '#ffa500']
-                });
-                confetti({
-                    particleCount: 5,
-                    angle: 120,
-                    spread: 55,
-                    origin: { x: 1 },
-                    colors: ['#ff0000', '#ffa500']
-                });
-
-                if (Date.now() < end) {
-                    requestAnimationFrame(frame);
-                }
-            }());
+            setTimeout(() => {
+                overlay.innerHTML = `
+                    <div class="text-center animate-pop">
+                        <div class="text-8xl mb-6">💖</div>
+                        <h1 class="font-script text-6xl text-deepRed mb-4">Sent With Love</h1>
+                        <p class="text-xl font-bold">You Matter To Me</p>
+                        <button onclick="location.reload()" class="mt-10 underline opacity-50">See Again</button>
+                    </div>
+                `;
+                confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+            }, 3000);
         }
     </script>
 </body>
