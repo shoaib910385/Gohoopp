@@ -319,31 +319,72 @@
         </button>
     </div>
         </div>
-        
+        <div id="s-flip" class="absolute inset-0 z-30 hidden flex-col items-center pt-10 pb-4 px-6 opacity-0 transition-opacity duration-700 bg-cream">
+    <div class="text-center mb-6">
+        <p class="font-script text-2xl text-pastelRed">just saying...</p>
+        <h1 class="font-bold text-3xl text-brown leading-tight">Little Things I<br>Messed Up (But<br>Care About)</h1>
+    </div>
 
-        <div id="s-flip" class="absolute inset-0 z-30 hidden flex-col items-center justify-center p-6 opacity-0 transition-opacity duration-700">
-            <p class="font-script text-2xl text-pastelRed mb-2">just saying...</p>
-            <h1 class="font-bold text-3xl text-brown mb-6">Little Things</h1>
+    <div class="w-full overflow-y-auto custom-scroll px-2 pb-24 space-y-8">
+
+        <div class="group perspective-1000 w-64 h-64 mx-auto cursor-pointer" onclick="this.classList.toggle('flipped')">
+             <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-6 bg-white/40 rotate-2 z-20 backdrop-blur-sm shadow-sm"></div>
             
-            <div class="w-64 h-80 perspective-1000 cursor-pointer mb-8" onclick="this.classList.toggle('flipped')">
-                <div class="flip-card-inner shadow-xl rounded-2xl">
-                    <div class="flip-card-front bg-yellow-50 border-2 border-yellow-200 flex flex-col items-center justify-center p-6">
-                        <div class="text-4xl mb-4">🥲</div>
-                        <h2 class="text-xl font-bold text-center text-gray-700">I may have been a little dumb sometimes</h2>
-                        <p class="mt-4 text-xs text-gray-400">(Tap to flip)</p>
-                    </div>
-                    <div class="flip-card-back bg-white border-2 border-red-100 flex flex-col items-center justify-center p-6">
-                         <img src="https://apology-2-demo.netlify.app/assets/pic3-CGh-Dqnr.jpg" class="w-24 h-24 object-cover rounded-full mb-3 border-2 border-red-200" alt="Funny Cat">
-                        <p class="text-center text-sm font-semibold text-gray-600 mb-2">But my intentions are pure!</p>
-                        <p class="text-center font-bold text-deepRed text-lg">You get adorably mad btw.</p>
-                    </div>
+            <div class="flip-card-inner relative w-full h-full text-center transition-transform duration-700 transform-style-3d shadow-xl rounded-xl">
+                <div class="flip-card-front absolute inset-0 w-full h-full bg-pink-200 flex flex-col items-center justify-center p-6 backface-hidden rounded-xl">
+                    <p class="font-handwriting text-2xl text-gray-700 leading-relaxed font-bold">I may have been a<br>little dumb<br>sometimes 🥲</p>
+                    <p class="absolute bottom-4 text-xs text-gray-500 opacity-70">(Tap to flip)</p>
+                </div>
+                <div class="flip-card-back absolute inset-0 w-full h-full bg-white flex flex-col items-center justify-center p-4 backface-hidden rotate-y-180 rounded-xl border-4 border-pink-200">
+                    <img src="https://apology-2-demo.netlify.app/assets/pic3-CGh-Dqnr.jpg" class="w-24 h-24 object-cover rounded-full mb-3 border-2 border-pink-300 shadow-sm" alt="Cat">
+                    <h3 class="font-bold text-pink-500 text-sm mb-1">Context:</h3>
+                    <p class="text-xs text-gray-600 leading-tight">No bad intentions, just bad timing. I'm working on it. 🥺</p>
                 </div>
             </div>
-
-            <button onclick="nextScreen('s-flip', 's-final')" class="bg-deepRed text-white px-8 py-3 rounded-full font-bold shadow-lg">
-                One Last Thing ➡️
-            </button>
         </div>
+
+        <div class="group perspective-1000 w-64 h-64 mx-auto cursor-pointer" onclick="this.classList.toggle('flipped')">
+             <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-6 bg-white/40 -rotate-1 z-20 backdrop-blur-sm shadow-sm"></div>
+            
+            <div class="flip-card-inner relative w-full h-full text-center transition-transform duration-700 transform-style-3d shadow-xl rounded-xl">
+                <div class="flip-card-front absolute inset-0 w-full h-full bg-blue-100 flex flex-col items-center justify-center p-6 backface-hidden rounded-xl">
+                    <p class="font-handwriting text-2xl text-gray-700 leading-relaxed font-bold">You get<br>adorably mad<br>😠</p>
+                    <p class="absolute bottom-4 text-xs text-gray-500 opacity-70">(Tap to flip)</p>
+                </div>
+                <div class="flip-card-back absolute inset-0 w-full h-full bg-white flex flex-col items-center justify-center p-4 backface-hidden rotate-y-180 rounded-xl border-4 border-blue-100">
+                    <img src="https://apology-2-demo.netlify.app/assets/pic1-BGQ1PBQT.jpg" class="w-24 h-24 object-cover rounded-full mb-3 border-2 border-blue-300 shadow-sm" alt="Cat">
+                    <h3 class="font-bold text-blue-500 text-sm mb-1">Observation:</h3>
+                    <p class="text-xs text-gray-600 leading-tight">Even when you're upset, you're still my favorite person. ❤️</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="group perspective-1000 w-64 h-64 mx-auto cursor-pointer" onclick="this.classList.toggle('flipped')">
+             <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-6 bg-white/40 rotate-1 z-20 backdrop-blur-sm shadow-sm"></div>
+            
+            <div class="flip-card-inner relative w-full h-full text-center transition-transform duration-700 transform-style-3d shadow-xl rounded-xl">
+                <div class="flip-card-front absolute inset-0 w-full h-full bg-yellow-100 flex flex-col items-center justify-center p-6 backface-hidden rounded-xl">
+                    <p class="font-handwriting text-2xl text-gray-700 leading-relaxed font-bold">I Love You<br>Always<br>💖</p>
+                    <p class="absolute bottom-4 text-xs text-gray-500 opacity-70">(Tap to flip)</p>
+                </div>
+                <div class="flip-card-back absolute inset-0 w-full h-full bg-white flex flex-col items-center justify-center p-4 backface-hidden rotate-y-180 rounded-xl border-4 border-yellow-100">
+                    <img src="https://apology-2-demo.netlify.app/assets/pic2-D1nocJRN.jpg" class="w-24 h-24 object-cover rounded-full mb-3 border-2 border-yellow-300 shadow-sm" alt="Cat">
+                    <h3 class="font-bold text-yellow-600 text-sm mb-1">Btw...</h3>
+                    <p class="text-xs text-gray-600 leading-tight">This is us. Always. ✨<br>(Also, free hug pending 🫂)</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="absolute bottom-6 left-0 w-full flex justify-center z-20 pointer-events-none">
+        <button onclick="nextScreen('s-flip', 's-final')" class="pointer-events-auto bg-deepRed text-white px-8 py-3 rounded-full font-bold shadow-lg hover:bg-red-700 transition-colors active:scale-95">
+            One Last Thing ➡️
+        </button>
+    </div>
+        </div>
+        
+        
 
         <div id="s-final" class="absolute inset-0 z-30 hidden flex-col items-center justify-center p-6 opacity-0 transition-opacity duration-700">
             <h4 class="font-script text-3xl text-pastelRed mb-2">the grand finale...</h4>
